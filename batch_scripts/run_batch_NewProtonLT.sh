@@ -1,6 +1,9 @@
-#! /bin/bash 
+#! /bin/bash
 
-##### A batch submission script based on an earlier version by Richard
+### Stephen Kay, University of Regina
+### 15/01/21
+### stephen.kay@uregina.ca
+### A batch submission script based on an earlier version by Richard
 
 echo "Running as ${USER}"
 ### Check if an argument was provided, if not assume -1, if yes, this is max events
@@ -24,7 +27,6 @@ batch="${USER}_Job.txt"
 ##Input run numbers##                                                                      
 ##Point this to the location of your input run list                                           
 inputFile="/group/c-kaonlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
-#inputFile="/group/c-kaonlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/Kaon_Data/ProductionLH2_ALL"
 
 ## Tape stub, you can point directly to a taped file and the farm job will do the jgetting for you, don't call it in your script!                                                      
 MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
@@ -77,21 +79,6 @@ while true; do
                 eval "jsub ${batch} 2>/dev/null"
                 echo " "
                 i=$(( $i + 1 ))
-                # string=$(cat ${inputFile} |tr "\n" " ")
-                # ##Converts input file to an array##
-                # rnum=($string)                                  
-                # eval "jobstat -u ${USER} 2>/dev/null" > ${tmp}
-                # ##Loop to find ID number of each run number##   
-		# for j in "${rnum[@]}"
-		# do
-		#     if [ $(grep -c $j ${tmp}) -gt 0 ]; then
-		# 	ID=$(echo $(grep $j ${tmp}) | head -c 8)
-		# 	#ID=$(echo $(grep $j ${tmp}) | head -c 8) 
-		# 	augerID[$i]=$ID
-		# 	echo "${augerID[@]}" >> $auger
-		#     fi	
-		# done   
-		# echo "${rnum[$i]} has an AugerID of ${augerID[$i]}" 
 		if [ $i == $numlines ]; then
 		    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 		    echo " "
