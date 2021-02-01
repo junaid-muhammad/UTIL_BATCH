@@ -67,9 +67,9 @@ while true; do
 		# Note, unless this is set typically replays will produce broken root files
 		echo "DISK_SPACE: "$(( $TapeFileSize * 2 ))" GB" >> ${batch}
 		if [[ $TapeFileSize -le 45 ]]; then # Assign memory based on size of tape file, should keep this as low as possible!
-                    echo "MEMORY: 2500 MB" >> ${batch}
-                elif [[ $TapeFileSize -ge 45 ]]; then
                     echo "MEMORY: 4000 MB" >> ${batch}
+                elif [[ $TapeFileSize -ge 45 ]]; then
+                    echo "MEMORY: 6000 MB" >> ${batch}
                 fi
 		#echo "OS: general" >> ${batch} # As of 16/1/20 centos 7.2 (which centos7 defaults to) cores being phased out. General will run on first available node (which should speed it up)
 		echo "CPU: 1" >> ${batch} ### hcana is single core, setting CPU higher will lower priority and gain you nothing!

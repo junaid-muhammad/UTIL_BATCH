@@ -64,9 +64,9 @@ while true; do
 		# Note, unless this is set typically replays will produce broken root files
 		echo "DISK_SPACE: "$(( $TapeFileSize / 2 ))" GB" >> ${batch}
 		if [[ $TapeFileSize -le 20 ]]; then # Assign memory based on size of tape file, should keep this as low as possible!
-                    echo "MEMORY: 4000 MB" >> ${batch}
+                    echo "MEMORY: 2500 MB" >> ${batch}
                 elif [[ $TapeFileSize -ge 20 ]]; then
-                    echo "MEMORY: 6000 MB" >> ${batch}
+                    echo "MEMORY: 4000 MB" >> ${batch}
                 fi
 		echo "CPU: 1" >> ${batch} ### hcana is single core, setting CPU higher will lower priority and gain you nothing!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}

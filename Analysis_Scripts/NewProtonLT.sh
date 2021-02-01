@@ -49,6 +49,7 @@ EOF
     cd $REPLAYPATH
 else echo "Scaler replayfile already found for this run in $REPLAYPATH/UTIL_PROTON/ROOTfilesProton/ - Skipping scaler replay step"
 fi
+sleep 15
 if [ ! -f "$REPLAYPATH/UTIL_PROTON/ROOTfilesProton/Proton_coin_replay_production_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
 	eval "$REPLAYPATH/hcana -l -q \"UTIL_PROTON/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\"" 
@@ -57,7 +58,7 @@ if [ ! -f "$REPLAYPATH/UTIL_PROTON/ROOTfilesProton/Proton_coin_replay_production
     fi
 else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PROTON/ROOTfilesProton/ - Skipping replay step"
 fi
-sleep 5
+sleep 15
 if [[ "${HOSTNAME}" = *"farm"* ]]; then  
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
 	source /apps/root/6.18.04/setroot_CUE.bash
@@ -65,8 +66,8 @@ if [[ "${HOSTNAME}" = *"farm"* ]]; then
 elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
     source /apps/root/6.18.04/setroot_CUE.bash
 fi
+sleep 15
 cd "$UTILPATH/scripts/protonyield"
 ## The line below needs tweaking with the run prefix!
 eval '"Analyse_Protons.sh" Proton_coin_replay_production ${RUNNUMBER} ${MAXEVENTS}'
 exit 0
-/
