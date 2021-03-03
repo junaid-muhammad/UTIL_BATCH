@@ -3,10 +3,9 @@
 ### Stephen Kay, University of Regina
 ### Last modified - 15/01/21
 ### stephen.kay@uregina.ca
-### A batch submission script based on an earlier version by Richard
+### A batch submission script based on an earlier version by Richard Trotta, Catholic University of America
 
 echo "Running as ${USER}"
-
 RunList=$1
 if [[ -z "$1" ]]; then
     echo "I need a run list process!"
@@ -18,19 +17,14 @@ if [[ $2 -eq "" ]]; then
 else
     MAXEVENTS=$2
 fi
-
 ##Output history file##
 historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
-
 ##Output batch script##
 batch="${USER}_Job.txt"
-
 ##Input run numbers##
 inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
-
 ## Tape stub
 MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
-
 auger="augerID.tmp"
 
 while true; do
@@ -44,7 +38,7 @@ while true; do
                 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                 echo "Run number read from file: $line"
                 echo ""
-                ## Run number ##                                                                                                                                                                             
+                ## Run number ##
                 runNum=$line
                 tape_file=`printf $MSSstub $runNum`
 		TapeFileSize=$(($(sed -n '4 s/^[^=]*= *//p' < $tape_file)/1000000000))

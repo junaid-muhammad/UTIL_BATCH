@@ -4,6 +4,9 @@
 ### Script for running (via batch or otherwise) the hodoscope calibration, this one script does all of the relevant steps for the calibration proces
 ### Note that the second part also has an additional bit where it checks for a database file based upon the run number
 
+### 26/02/21 - SK - NOTE, this script is likely quite outdated now, needs updating.
+### Major issue will be with which db file it grabs, also should probably use new cal calibration and put OUTPUT in  
+
 RUNNUMBER=$1
 OPT=$2
 ### Check you've provided the first argument  
@@ -82,7 +85,7 @@ if [ ! -d "$REPLAYPATH/CALIBRATION/shms_hodo_calib/Calibration_Plots" ]; then
 fi
 
 eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/CALIBRATION/"$OPT"Hodo_Calib_Coin_Pt1.C($RUNNUMBER,$MAXEVENTS)\""
-ROOTFILE="$REPLAYPATH/ROOTfilesHodoCalib/"$OPT"_Hodo_Calib_Pt1_"$RUNNUMBER"_"$MAXEVENTS".root" 
+ROOTFILE="$REPLAYPATH/ROOTfiles/Calib/Hodo/"$OPT"_Hodo_Calib_Pt1_"$RUNNUMBER"_"$MAXEVENTS".root" 
 
 if [[ $OPT == "HMS" ]]; then
     spec="hms"
@@ -160,7 +163,7 @@ mv "$REPLAYPATH/CALIBRATION/"$spec"_hodo_calib/timeWalkHistos_"$RUNNUMBER".root"
 
 cd "$REPLAYPATH/CALIBRATION/"$spec"_hodo_calib/"
 # Define the path to the second replay root file
-ROOTFILE2="$REPLAYPATH/ROOTfilesHodoCalib/"$OPT"_Hodo_Calib_Pt2_"$RUNNUMBER"_"$MAXEVENTS".root"
+ROOTFILE2="$REPLAYPATH/ROOTfiles/Hodo/Calib"$OPT"_Hodo_Calib_Pt2_"$RUNNUMBER"_"$MAXEVENTS".root"
 # Execute final script
 root -l -q -b "$REPLAYPATH/CALIBRATION/"$spec"_hodo_calib/fitHodoCalib.C(\"$ROOTFILE2\", $RUNNUMBER)" 
 # Check our new file exists, if not exit, if yes, move it

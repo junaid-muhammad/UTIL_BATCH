@@ -5,6 +5,9 @@
 ### REQUIRES two arguments, runnumber and spectrometer (HMS or SHMS, the caps are important!)
 ### If you want to run with LESS than all of the events, provide a third argument with # events
 
+### 26/02/21 - SK - NOTE, this script is likely quite outdated now, needs updating.
+### Major issue will be with which db file it grabs, also should probably use new cal calibration and put OUTPUT in a different location
+
 RUNNUMBER=$1
 OPT=$2
 ### Check you've provided the first argument
@@ -95,9 +98,9 @@ if [ $OPT == "SHMS" ]; then
 fi
 sleep 10
 rm -rf "Tmp_"$RUNNUMBER"_"$OPT".txt"
-rm -rf "$REPLAYPATH/ROOTfilesCalCalib/"$OPT"_Cal_Calib_"$RUNNUMBER"_1.root" 
+rm -rf "$REPLAYPATH/ROOTfiles/Calib/Cal/"$OPT"_Cal_Calib_"$RUNNUMBER"_1.root" 
 eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/CALIBRATION/"$OPT"Cal_Calib_Coin.C($RUNNUMBER,$MAXEVENTS)\""
-ROOTFILE="$REPLAYPATH/ROOTfilesCalCalib/"$OPT"_Cal_Calib_"$RUNNUMBER"_"$MAXEVENTS".root" 
+ROOTFILE="$REPLAYPATH/ROOTfiles/Calib/Cal/"$OPT"_Cal_Calib_"$RUNNUMBER"_"$MAXEVENTS".root" 
 cd "$REPLAYPATH/CALIBRATION/"$spec"_cal_calib/"
 # Copy the input file with a one specific to this run
 cp "input.dat" "Input/input_"$RUNNUMBER".dat"

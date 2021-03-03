@@ -5,6 +5,9 @@
 ### REQUIRES two arguments, runnumber and spectrometer (HMS or SHMS, the caps are important!)
 ### If you want to run with LESS than all of the events, provide a third argument with # events
 
+### 26/02/21 - SK - NOTE, this script is likely quite outdated now, needs updating.
+### Major issue will be with which db file it grabs, also should probably use new cal calibration and put OUTPUT in  
+
 RUNNUMBER=$1
 OPT=$2
 ### Check you've provided the first argument
@@ -80,7 +83,7 @@ fi
 
 ### Run the first replay script, then, run the calibration macro
 eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/CALIBRATION/"$OPT"DC_Calib_Coin_Pt1.C($RUNNUMBER,$MAXEVENTS)\""
-ROOTFILE="$REPLAYPATH/ROOTfilesDCCalib/"$OPT"_DC_Calib_Pt1_"$RUNNUMBER"_"$MAXEVENTS".root" 
+ROOTFILE="$REPLAYPATH/ROOTfiles/Calib/DC/"$OPT"_DC_Calib_Pt1_"$RUNNUMBER"_"$MAXEVENTS".root" 
 cd "$REPLAYPATH/CALIBRATION/dc_calib/scripts"
 root -l -b -q "$REPLAYPATH/CALIBRATION/dc_calib/scripts/main_calib.C(\"$OPT\", \"$ROOTFILE\", $RUNNUMBER)"
 

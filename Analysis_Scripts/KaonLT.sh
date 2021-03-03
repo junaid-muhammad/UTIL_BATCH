@@ -39,29 +39,32 @@ elif [[ "${HOSTNAME}" = *"cdaq"* ]]; then
 elif [[ "${HOSTNAME}" = *"phys.uregina.ca"* ]]; then
     REPLAYPATH="/home/${USER}/work/JLab/hallc_replay_lt"
 fi
-UTILPATH="${REPLAYPATH}/UTIL_PION"
+UTILPATH="${REPLAYPATH}/UTIL_KAONLT"
 cd $REPLAYPATH
-# Note, this replay script needs a little cleaning up
-if [ ! -f "$REPLAYPATH/UTIL_PION/ROOTfilesPion/coin_replay_scalers_${RUNNUMBER}_150000.root" ]; then
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/replay_coin_scalers.C($RUNNUMBER,150000)\""
+# Note, using the proton replay files is temporary! Need to fix up the replay scripts for KaonLT a little
+# Ideally, you want to do the same thing here though
+# 03/03/21 - Note, need to actually modify these KaonLT scripts still too
+if [ ! -f "$REPLAYPATH/UTIL_KAONLT/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_150000.root" ]; then
+    eval "$REPLAYPATH/hcana -l -q \"UTIL_KAONLT/scripts/replay/replay_coin_scalers.C($RUNNUMBER,150000)\""
     cd "$REPLAYPATH/CALIBRATION/bcm_current_map"
     root -b<<EOF 
 .L ScalerCalib.C+
-.x run.C("${REPLAYPATH}/UTIL_PION/ROOTfilesPion/coin_replay_scalers_${RUNNUMBER}_150000.root")
+.x run.C("${REPLAYPATH}/UTIL_KAONLT/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_150000.root")
 .q  
 EOF
     mv bcmcurrent_$RUNNUMBER.param $REPLAYPATH/PARAM/HMS/BCM/CALIB/bcmcurrent_$RUNNUMBER.param
     cd $REPLAYPATH
-else echo "Scaler replayfile already found for this run in $REPLAYPATH/UTIL_PION/ROOTfilesPion/ - Skipping scaler replay step"
+else echo "Scaler replayfile already found for this run in $REPLAYPATH/UTIL_KAONLT/ROOTfiles/Scalers - Skipping scaler replay step"
 fi
 sleep 15
-if [ ! -f "$REPLAYPATH/UTIL_PION/ROOTfilesPion/Pion_coin_replay_production_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
+# 03/03/21 - SK, again these files will actually need updating too
+if [ ! -f "$REPLAYPATH/UTIL_KAONLT/ROOTfiles/Analysis/KaonLT/Kaon_coin_replay_production_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
-	eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\"" 
+	eval "$REPLAYPATH/hcana -l -q \"UTIL_KAONLT/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\"" 
     elif [[ "${HOSTNAME}" == *"ifarm"* ]]; then
-	eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\""| tee $REPLAYPATH/UTIL_PION/REPORT_OUTPUT/Pion_output_coin_production_${RUNNUMBER}_${MAXEVENTS}.report
+	eval "$REPLAYPATH/hcana -l -q \"UTIL_KAONLT/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\""| tee $REPLAYPATH/UTIL_KAONLT/REPORT_OUTPUT/Analysis/KaonLT/Proton_output_coin_production_${RUNNUMBER}_${MAXEVENTS}.report
     fi
-else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PION/ROOTfilesPion/ - Skipping replay step"
+else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_KAONLT/ROOTfiles/Analysis/KaonLT/ - Skipping replay step"
 fi
 sleep 15
 if [[ "${HOSTNAME}" = *"farm"* ]]; then  
@@ -72,6 +75,8 @@ elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
     source /apps/root/6.18.04/setroot_CUE.bash
 fi
 sleep 15
-cd "$UTILPATH/scripts/pionyield"
-eval '"Analyse_Pions.sh" Pion_coin_replay_production ${RUNNUMBER} ${MAXEVENTS}'
+# 03/03/21 - SK, again these files will actually need updating too
+cd "$UTILPATH/scripts/kaonyield"
+## The line below needs tweaking with the run prefix!
+eval '"Analyse_Kaons.sh" Kaon_coin_replay_production ${RUNNUMBER} ${MAXEVENTS}'
 exit 0
