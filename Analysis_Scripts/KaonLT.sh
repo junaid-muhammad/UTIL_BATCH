@@ -7,12 +7,18 @@
 echo "Starting Replay script"
 echo "I take as arguments the Run Number and max number of events!"
 RUNNUMBER=$1
-MAXEVENTS=-1
+MAXEVENTS=$2
 ### Check you've provided the an argument
-if [[ $1 -eq "" ]]; then
+if [[ -z "$1" ]]; then
     echo "I need a Run Number!"
     echo "Please provide a run number as input"
     exit 2
+fi
+### Check if a second argument was provided, if not assume -1, if yes, this is max events
+if [[ -z "$2" ]]; then
+    MAXEVENTS=-1
+elsex
+    MAXEVENTS=$2
 fi
 if [[ ${USER} = "cdaq" ]]; then
     echo "Warning, running as cdaq."
