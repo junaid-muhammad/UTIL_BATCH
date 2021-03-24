@@ -26,12 +26,14 @@ if [[ "${HOSTNAME}" = *"farm"* ]]; then
     REPLAYPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt"
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
 	source /site/12gev_phys/softenv.sh 2.3
+	source /apps/root/6.18.04/setroot_CUE.bash
     fi
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh"
 elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
     REPLAYPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt"
     source /site/12gev_phys/softenv.sh 2.3
+    source /apps/root/6.18.04/setroot_CUE.bash
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh" 
 elif [[ "${HOSTNAME}" = *"cdaq"* ]]; then
@@ -63,15 +65,7 @@ if [ ! -f "$REPLAYPATH/UTIL_PION/ROOTfiles/Analysis/PionLT/Pion_coin_replay_prod
     fi
 else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PION/ROOTfiles/Analysis/PionLT/ - Skipping replay step"
 fi
-sleep 15
-if [[ "${HOSTNAME}" = *"farm"* ]]; then  
-    if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
-	source /apps/root/6.18.04/setroot_CUE.bash
-    fi
-elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
-    source /apps/root/6.18.04/setroot_CUE.bash
-fi
-sleep 15
+sleep 5
 cd "$UTILPATH/scripts/pionyield"
 eval '"Analyse_Pions.sh" Pion_coin_replay_production ${RUNNUMBER} ${MAXEVENTS}'
 exit 0

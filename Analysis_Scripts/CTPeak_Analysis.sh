@@ -23,12 +23,14 @@ if [[ "${HOSTNAME}" = *"farm"* ]]; then
     REPLAYPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt"
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
 	source /site/12gev_phys/softenv.sh 2.3
+	source /apps/root/6.18.04/setroot_CUE.bash
     fi
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh"
 elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
     REPLAYPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt"
     source /site/12gev_phys/softenv.sh 2.3
+    source /apps/root/6.18.04/setroot_CUE.bash
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh" 
 elif [[ "${HOSTNAME}" = *"cdaq"* ]]; then
@@ -61,13 +63,6 @@ if [ ! -f "$REPLAYPATH/UTIL_PION/ROOTfiles/Analysis/PionLT/Pion_coin_replay_prod
 else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PION/ROOTfiles/Analysis/PionLT/ - Skipping replay step"
 fi
 sleep 5
-if [[ "${HOSTNAME}" = *"farm"* ]]; then
-    if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
-	source /apps/root/6.18.04/setroot_CUE.bash
-    fi
-elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
-    source /apps/root/6.18.04/setroot_CUE.bash
-fi
 cd "$UTILPATH/scripts/CoinTimePeak"
 if [ ! -f "$UTILPATH/OUTPUT/Analysis/PionLT/${RUNNUMBER}_{MAXEVENTS}_CTPeak_Data.root" ]; then
     python3 $UTILPATH/scripts/CoinTimePeak/src/CoinTimePeak.py ${ROOTSTRING} ${RUNNUMBER} ${MAXEVENTS} 

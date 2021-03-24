@@ -22,12 +22,14 @@ if [[ "${HOSTNAME}" = *"farm"* ]]; then
     REPLAYPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt"
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
 	source /site/12gev_phys/softenv.sh 2.3
+	source /apps/root/6.18.04/setroot_CUE.bash
     fi
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh"
 elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
     REPLAYPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt"
     source /site/12gev_phys/softenv.sh 2.3
+    source /apps/root/6.18.04/setroot_CUE.bash
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh" 
 elif [[ "${HOSTNAME}" = *"cdaq"* ]]; then
@@ -60,16 +62,7 @@ if [ ! -f "$REPLAYPATH/UTIL_PROTON/ROOTfiles/Analysis/ProtonLT/Proton_coin_repla
     fi
 else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PROTON/ROOTfiles/Analysis/ProtonLT/ - Skipping replay step"
 fi
-sleep 15
-# 03/03/21 - SK, note these scripts actually need to be updated too
-if [[ "${HOSTNAME}" = *"farm"* ]]; then  
-    if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
-	source /apps/root/6.18.04/setroot_CUE.bash
-    fi
-elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
-    source /apps/root/6.18.04/setroot_CUE.bash
-fi
-sleep 15
+sleep 5
 cd "$UTILPATH/scripts/protonyield"
 ## The line below needs tweaking with the run prefix!
 eval '"Analyse_Protons.sh" Proton_coin_replay_production ${RUNNUMBER} ${MAXEVENTS}'
