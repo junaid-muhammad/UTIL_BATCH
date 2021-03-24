@@ -20,8 +20,6 @@ fi
 
 ##Output history file
 historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
-##Output batch script                                                                        
-batch="${USER}_Job.txt"
 ##Input run numbers
 inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
 ## Tape stub, you can point directly to a taped file and the farm job will do the jgetting for you, don't call it in your script!                                                      
@@ -41,6 +39,8 @@ while true; do
                 echo ""
                 ##Run number#
                 runNum=$line
+		##Output batch job file                                                                        
+		batch="${USER}_${runNum}_PionLT_Job.txt"
                 tape_file=`printf $MSSstub $runNum`
 		# Print the size of the raw .dat file (converted to GB) to screen. sed command reads line 3 of the tape stub without the leading size=
 	        TapeFileSize=$(($(sed -n '4 s/^[^=]*= *//p' < $tape_file)/1000000000))
@@ -55,7 +55,7 @@ while true; do
                 echo "Running ${batch} for ${runNum}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission
-                echo "PROJECT: c-pionlt" >> ${batch} # Or whatever your project is!
+                echo "PROJECT: c-kaonlt" >> ${batch} # Or whatever your project is!
 		echo "TRACK: analysis" >> ${batch} ## Use this track for production running
 		#echo "TRACK: debug" >> ${batch} ### Use this track for testing, higher priority
                 echo "JOBNAME: PionLT_${runNum}" >> ${batch} ## Change to be more specific if you want
@@ -75,6 +75,8 @@ while true; do
                 echo "Submitting batch"
                 eval "jsub ${batch} 2>/dev/null"
                 echo " "
+		sleep 2
+		rm ${batch}
                 i=$(( $i + 1 ))
 		if [ $i == $numlines ]; then
 		    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"

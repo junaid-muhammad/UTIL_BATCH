@@ -18,8 +18,7 @@ fi
 ##Output history file##                                                                                            
 historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
 
-##Output batch script##                                                                     
-batch="${USER}_Job.txt"
+##Output batch script##
 
 ##Input run numbers##                                                                      
 ##Point this to the location of your input run list                                           
@@ -41,6 +40,7 @@ while true; do
                 echo ""
                 ##Run number#                                                                                                                                                                                     
                 runNum=$line
+		batch="${USER}_${runNum}_CTPeak_Job.txt"
                 tape_file=`printf $MSSstub $runNum`
 		# Print the size of the raw .dat file (converted to GB) to screen. sed command reads line 3 of the tape stub without the leading size=
 	        TapeFileSize=$(($(sed -n '4 s/^[^=]*= *//p' < $tape_file)/1000000000))
@@ -52,10 +52,10 @@ while true; do
                 ##Finds number of lines of input file##                          
                 numlines=$(eval "wc -l < ${inputFile}")
                 echo "Job $(( $i + 2 ))/$(( $numlines ))"
-                echo "Running ${batch} for ${runNum}"
+                echo "Running ${batch}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission##                                      
-                echo "PROJECT: c-pionlt" >> ${batch} # Or whatever your project is!
+                echo "PROJECT: c-kaonlt" >> ${batch} # Or whatever your project is!
 		echo "TRACK: analysis" >> ${batch} ## Use this track for production running
 		#echo "TRACK: debug" >> ${batch} ### Use this track for testing, higher priority
                 echo "JOBNAME: CTPeak_${runNum}" >> ${batch} ## Change to be more specific if you want
@@ -66,6 +66,8 @@ while true; do
                     echo "MEMORY: 3000 MB" >> ${batch}
                 elif [[ $TapeFileSize -ge 20 ]]; then
                     echo "MEMORY: 4000 MB" >> ${batch}
+                elif [[ $TapeFileSize -ge 50 ]]; then
+                    echo "MEMORY: 6000 MB" >> ${batch}
                 fi
 		echo "CPU: 1" >> ${batch} ### hcana is single core, setting CPU higher will lower priority and gain you nothing!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}
@@ -74,6 +76,8 @@ while true; do
                 echo "Submitting batch"
                 eval "jsub ${batch} 2>/dev/null"
                 echo " "
+		sleep 2
+		rm ${batch}
                 i=$(( $i + 1 )) 
 		if [ $i == $numlines ]; then
 		    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"

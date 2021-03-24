@@ -51,7 +51,7 @@ while true; do
                 echo "Running ${batch} for ${runNum}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission##
-                echo "PROJECT: c-pionlt" >> ${batch}
+                echo "PROJECT: c-kaonlt" >> ${batch}
 		echo "TRACK: analysis" >> ${batch}
 		#echo "TRACK: debug" >> ${batch}
                 echo "JOBNAME: KaonLT_DCCalib_${SPEC}_${runNum}" >> ${batch}

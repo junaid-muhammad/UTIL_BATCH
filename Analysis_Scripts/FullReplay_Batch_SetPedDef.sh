@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# SK 04/03/21
+# Need to tweak this to actually process and set pedestal defaults correctly, replay script needs fixing
+
 echo "Starting Replay script"
 echo "I take as arguments the Run Number and max number of events!"
 RUNNUMBER=$1

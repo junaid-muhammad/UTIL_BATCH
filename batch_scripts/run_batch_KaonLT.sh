@@ -41,6 +41,8 @@ while true; do
                 echo ""
                 ##Run number#
                 runNum=$line
+		##Output batch job text file##
+		batch="${USER}_${runNum}_KaonLT_Job.txt"
                 tape_file=`printf $MSSstub $runNum`
 		# Print the size of the raw .dat file (converted to GB) to screen. sed command reads line 3 of the tape stub without the leading size=
 	        TapeFileSize=$(($(sed -n '4 s/^[^=]*= *//p' < $tape_file)/1000000000))
@@ -49,13 +51,13 @@ while true; do
                 fi
 		echo "Raw .dat file is "$TapeFileSize" GB"
                 tmp=tmp
-                ##Finds number of lines of input file##                                                                                                                       
+                ##Finds number of lines of input file##                                  
                 numlines=$(eval "wc -l < ${inputFile}")
                 echo "Job $(( $i + 2 ))/$(( $numlines +1 ))"
                 echo "Running ${batch} for ${runNum}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission##
-                echo "PROJECT: c-pionlt" >> ${batch} # Or whatever your project is!
+                echo "PROJECT: c-kaonlt" >> ${batch} # Or whatever your project is!
 		echo "TRACK: analysis" >> ${batch} ## Use this track for production running
 		#echo "TRACK: debug" >> ${batch} ### Use this track for testing, higher priority
                 echo "JOBNAME: KaonLT_${runNum}" >> ${batch} ## Change to be more specific if you want
@@ -75,6 +77,8 @@ while true; do
                 echo "Submitting batch"
                 eval "jsub ${batch} 2>/dev/null"
                 echo " "
+		##Output batch script##
+		batch="${USER}_Job.txt"
                 i=$(( $i + 1 ))
 		if [ $i == $numlines ]; then
 		    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"

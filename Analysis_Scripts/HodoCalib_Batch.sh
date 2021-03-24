@@ -5,7 +5,8 @@
 ### Note that the second part also has an additional bit where it checks for a database file based upon the run number
 
 ### 26/02/21 - SK - NOTE, this script is likely quite outdated now, needs updating.
-### Major issue will be with which db file it grabs, also should probably use new cal calibration and put OUTPUT in  
+### Major issue will be with which db file it grabs, also should probably use new cal calibration and put OUTPUT in
+### Also, do the folders it's outputing to exist by default? If not they should be checked and created as needed
 
 RUNNUMBER=$1
 OPT=$2

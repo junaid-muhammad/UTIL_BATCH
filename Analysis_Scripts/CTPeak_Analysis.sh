@@ -58,10 +58,10 @@ if [ ! -f "$REPLAYPATH/UTIL_PION/ROOTfiles/Analysis/PionLT/Pion_coin_replay_prod
     elif [[ "${HOSTNAME}" == *"ifarm"* ]]; then
 	eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\""| tee $REPLAYPATH/UTIL_PION/REPORT_OUTPUT/Analysis/PionLT/Proton_output_coin_production_${RUNNUMBER}_${MAXEVENTS}.report
     fi
-else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PROTON/ROOTfiles/Analysis/PionLT/ - Skipping replay step"
+else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PION/ROOTfiles/Analysis/PionLT/ - Skipping replay step"
 fi
 sleep 5
-if [[ "${HOSTNAME}" = *"farm"* ]]; then  
+if [[ "${HOSTNAME}" = *"farm"* ]]; then
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
 	source /apps/root/6.18.04/setroot_CUE.bash
     fi

@@ -16,8 +16,6 @@ fi
 
 ##Output history file##
 historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
-##Output batch script##
-batch="${USER}_Job.txt"
 ##Input run numbers##
 inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
 ## Tape stub
@@ -35,7 +33,10 @@ while true; do
                 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                 echo "Run number read from file: $line"
                 echo ""
-                ##Run number#                runNum=$line
+                ##Run number#
+                runNum=$line
+		##Output batch job file##
+		batch="${USER}_${runNum}_FullReplay_Job.txt"
                 tape_file=`printf $MSSstub $runNum`
 		TapeFileSize=$(($(sed -n '4 s/^[^=]*= *//p' < $tape_file)/1000000000))
 		if [[ $TapeFileSize == 0 ]];then
@@ -49,7 +50,7 @@ while true; do
                 echo "Running ${batch} for ${runNum}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission##
-                echo "PROJECT: c-pionlt" >> ${batch}
+                echo "PROJECT: c-kaonlt" >> ${batch}
                 echo "TRACK: analysis" >> ${batch}
                 #echo "TRACK: debug" >> ${batch} ### Use for testing
                 echo "JOBNAME: KaonLT_${runNum}" >> ${batch}
@@ -69,6 +70,8 @@ while true; do
                 echo "Submitting batch"
                 eval "jsub ${batch} 2>/dev/null"
                 echo " "
+		sleep 2
+		rm ${batch}
                 i=$(( $i + 1 ))
 		if [ $i == $numlines ]; then
 		    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
