@@ -150,6 +150,7 @@ if [[ ! -f "$BASE_DBASEFILE" || ! -f "$BASE_PARAMFILE_PATH" ]]; then
     exit 3
 fi
 
+#echo "Copying $BASE_DBASEFILE and $BASE_PARAMFILE_PATH to ${OPT}_DCCalib"
 cp "$BASE_DBASEFILE" "${REPLAYPATH}/DBASE/COIN/${OPT}_DCCalib/standard_${RUNNUMBER}.database"
 cp "$BASE_PARAMFILE_PATH" "${REPLAYPATH}/DBASE/COIN/${OPT}_DCCalib/general_${RUNNUMBER}.param"
 
