@@ -1,9 +1,13 @@
 #!/bin/bash
 
-### Stephen Kay --- University of Regina --- 12/11/19 ###
-### Script for running (via batch or otherwise) the calorimeter calibration
+### Stephen Kay --- University of Regina --- 08/04/21 ###
+### An updated and improved script for running (via batch or otherwise) the calorimeter calibration
 ### REQUIRES two arguments, runnumber and spectrometer (HMS or SHMS, the caps are important!)
 ### If you want to run with LESS than all of the events, provide a third argument with # events
+
+### Note, this script assumes a certain replay is used (which therefore generates a specific ROOTfile name/path)
+### It also assumes that the calibration files for the Calorimeter are named in a consistent manner
+### E.g. there is a "cuts", "geom" and normal calibration file
 
 RUNNUMBER=$1
 OPT=$2
