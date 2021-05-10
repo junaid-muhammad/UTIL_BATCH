@@ -179,8 +179,12 @@ cd "$REPLAYPATH/CALIBRATION/"$spec"_cal_calib/"
 # # Copy the input file with a one specific to this run
  cp "input.dat" "Input/input_"$RUNNUMBER".dat"
 # # Snip off the parameters in the input file leaving only the setup conditions and add a new line to the file (which is CRUCIAL!)
- sed -i '8, $d' "Input/input_"$RUNNUMBER".dat"
- echo $'\n' >> "Input/input_"$RUNNUMBER".dat"
+if [ $OPT == "HMS" ]; then
+     sed -i '9, $d' "Input/input_"$RUNNUMBER".dat"
+     echo $'\n' >> "Input/input_"$RUNNUMBER".dat"
+elif [ $OPT == "SHMS" ]; then
+     sed -i '10, $d' "Input/input_"$RUNNUMBER".dat"
+fi
 # # We now need to copy in the relevant parameters that were used in the replay
 # # Copies block of parameters and appends them to our input file, expects block of params to be in first 21 lines!
  sed -n '1, 21p' ${CALIB_PARAMPATH} | tee -a "Input/input_"$RUNNUMBER".dat"
