@@ -41,21 +41,21 @@ if [[ ${USER} = "cdaq" ]]; then
 fi        
 # Set path depending upon hostname. Change or add more as needed  
 if [[ "${HOSTNAME}" = *"farm"* ]]; then  
-    REPLAYPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt"
+    REPLAYPATH="/group/c-kaonlt/USERS/${USER}/hallc_replay_lt"
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
 	source /site/12gev_phys/softenv.sh 2.3
 	source /apps/root/6.18.04/setroot_CUE.bash
     fi
-    cd "/group/c-pionlt/hcana/"
-    source "/group/c-pionlt/hcana/setup.sh"
+    cd "/group/c-kaonlt/hcana/"
+    source "/group/c-kaonlt/hcana/setup.sh"
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh"
 elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
-    REPLAYPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt"
+    REPLAYPATH="/group/c-kaonlt/USERS/${USER}/hallc_replay_lt"
     source /site/12gev_phys/softenv.sh 2.3
     source /apps/root/6.18.04/setroot_CUE.bash
-    cd "/group/c-pionlt/hcana/"
-    source "/group/c-pionlt/hcana/setup.sh" 
+    cd "/group/c-kaonlt/hcana/"
+    source "/group/c-kaonlt/hcana/setup.sh" 
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh" 
 elif [[ "${HOSTNAME}" = *"cdaq"* ]]; then
@@ -81,10 +81,10 @@ fi
 ### Note, this is a stop gap, the calibration script should really just look for a sym link in the base directory itself
 ### Check the sym link you'll need exists, if it doesn't, make it!
 if [ ! -L "$REPLAYPATH/CALIBRATION/hms_cal_calib/ROOTfiles" ]; then
-    ln -s "/volatile/hallc/c-pionlt/${USER}/ROOTfiles" "$REPLAYPATH/CALIBRATION/hms_cal_calib/ROOTfiles"
+    ln -s "/volatile/hallc/c-kaonlt/${USER}/ROOTfiles" "$REPLAYPATH/CALIBRATION/hms_cal_calib/ROOTfiles"
 fi
 if [ ! -L "$REPLAYPATH/CALIBRATION/shms_cal_calib/ROOTfiles" ]; then
-    ln -s "/volatile/hallc/c-pionlt/${USER}/ROOTfiles" "$REPLAYPATH/CALIBRATION/shms_cal_calib/ROOTfiles"
+    ln -s "/volatile/hallc/c-kaonlt/${USER}/ROOTfiles" "$REPLAYPATH/CALIBRATION/shms_cal_calib/ROOTfiles"
 fi
 
 ### Run the first replay script, then, run the calibration macro
