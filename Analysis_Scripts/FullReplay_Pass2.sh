@@ -14,6 +14,12 @@ if [[ $1 -eq "" ]]; then
     echo "Please provide a run number as input"
     exit 2
 fi
+### Check if a second argument was provided, if not assume -1, if yes, this is max events
+if [[ -z "$2" ]]; then
+    MAXEVENTS=-1
+else
+    MAXEVENTS=$2
+fi
 if [[ ${USER} = "cdaq" ]]; then
     echo "Warning, running as cdaq."
     echo "Please be sure you want to do this."

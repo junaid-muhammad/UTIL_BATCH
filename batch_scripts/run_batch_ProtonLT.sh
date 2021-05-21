@@ -69,7 +69,7 @@ while true; do
                 fi
 		echo "CPU: 1" >> ${batch} ### hcana is single core, setting CPU higher will lower priority and gain you nothing!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}
-		### 03/03/21 - SK, note that this script needs fixing still (pathing of scripts it calls has not been adjusted)
+		echo "TIME: 2880" >> ${batch} # Set max run time to 2 days (1 job exceeded 1 day previously)
                 echo "COMMAND:/group/c-kaonlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/ProtonLT.sh ${runNum} ${MAXEVENTS}"  >> ${batch}
                 echo "MAIL: ${USER}@jlab.org" >> ${batch}
                 echo "Submitting batch"
