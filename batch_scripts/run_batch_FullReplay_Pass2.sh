@@ -11,6 +11,11 @@ if [[ -z "$1" ]]; then
     echo "Please provide a run list as input"
     exit 2
 fi
+if [[ $2 -eq "" ]]; then
+    MAXEVENTS=-1
+else
+    MAXEVENTS=$2
+fi
 
 ##Output history file##
 historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
@@ -62,8 +67,8 @@ while true; do
 		#echo "OS: centos7" >> ${batch}
                 echo "CPU: 1" >> ${batch} ### hcana single core, setting CPU higher will lower priority!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}
-		#echo "TIME: 1" >> ${batch} 
-		echo "COMMAND:/group/c-kaonlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_Pass2.sh ${runNum} -1" >> ${batch}
+		echo "TIME: 2880" >> ${batch} 
+		echo "COMMAND:/group/c-kaonlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_Pass2.sh ${runNum} ${MAXEVENTS}" >> ${batch}
 		echo "MAIL: ${USER}@jlab.org" >> ${batch}
                 echo "Submitting batch"
                 eval "jsub ${batch} 2>/dev/null"

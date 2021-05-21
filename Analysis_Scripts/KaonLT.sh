@@ -52,12 +52,12 @@ cd $REPLAYPATH
 # Note, using the proton replay files is temporary! Need to fix up the replay scripts for KaonLT a little
 # Ideally, you want to do the same thing here though
 # 03/03/21 - Note, need to actually modify these KaonLT scripts still too
-if [ ! -f "$REPLAYPATH/UTIL_KAONLT/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_150000.root" ]; then
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_KAONLT/scripts/replay/replay_coin_scalers.C($RUNNUMBER,150000)\""
+if [ ! -f "$REPLAYPATH/UTIL_KAONLT/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
+    eval "$REPLAYPATH/hcana -l -q \"UTIL_KAONLT/scripts/replay/replay_coin_scalers.C($RUNNUMBER,${MAXEVENTS})\""
     cd "$REPLAYPATH/CALIBRATION/bcm_current_map"
     root -b<<EOF 
 .L ScalerCalib.C+
-.x run.C("${REPLAYPATH}/UTIL_KAONLT/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_150000.root")
+.x run.C("${REPLAYPATH}/UTIL_KAONLT/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_${MAXEVENTS}.root")
 .q  
 EOF
     mv bcmcurrent_$RUNNUMBER.param $REPLAYPATH/PARAM/HMS/BCM/CALIB/bcmcurrent_$RUNNUMBER.param

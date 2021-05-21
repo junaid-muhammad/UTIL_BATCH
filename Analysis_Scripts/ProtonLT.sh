@@ -46,12 +46,12 @@ fi
 UTILPATH="${REPLAYPATH}/UTIL_PROTON"
 cd $REPLAYPATH
 # 03/03/21 - SK, note these scripts actually need to be updated too
-if [ ! -f "$REPLAYPATH/UTIL_PROTON/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_150000.root" ]; then
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_PROTON/scripts/replay/replay_coin_scalers.C($RUNNUMBER,150000)\""
+if [ ! -f "$REPLAYPATH/UTIL_PROTON/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
+    eval "$REPLAYPATH/hcana -l -q \"UTIL_PROTON/scripts/replay/replay_coin_scalers.C($RUNNUMBER,${MAXEVENTS})\""
     cd "$REPLAYPATH/CALIBRATION/bcm_current_map"
     root -b<<EOF 
 .L ScalerCalib.C+
-.x run.C("${REPLAYPATH}/UTIL_PROTON/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_150000.root")
+.x run.C("${REPLAYPATH}/UTIL_PROTON/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_${MAXEVENTS}.root")
 .q  
 EOF
     mv bcmcurrent_$RUNNUMBER.param $REPLAYPATH/PARAM/HMS/BCM/CALIB/bcmcurrent_$RUNNUMBER.param
