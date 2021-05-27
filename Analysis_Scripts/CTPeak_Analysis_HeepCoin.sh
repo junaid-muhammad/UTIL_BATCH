@@ -1,25 +1,16 @@
 #!/bin/bash
 
-### Stephen Kay, University of Regina
-### 15/01/21
-### stephen.kay@uregina.ca
-
 echo "Starting Replay script"
 echo "I take as arguments the Run Number and max number of events!"
 RUNNUMBER=$1
-MAXEVENTS=$2
+MAXEVENTS=-1
+ROOTSTRING="Proton_coin_replay_production"
 ### Check you've provided the an argument
-if [[ -z "$1" ]]; then
+if [[ $1 -eq "" ]]; then
     echo "I need a Run Number!"
     echo "Please provide a run number as input"
     exit 2
 fi
-if [[ -z "$2" ]]; then
-    MAXEVENTS=-1
-else
-    MAXEVENTS=$2
-fi
-
 if [[ ${USER} = "cdaq" ]]; then
     echo "Warning, running as cdaq."
     echo "Please be sure you want to do this."
@@ -47,7 +38,7 @@ elif [[ "${HOSTNAME}" = *"cdaq"* ]]; then
 elif [[ "${HOSTNAME}" = *"phys.uregina.ca"* ]]; then
     REPLAYPATH="/home/${USER}/work/JLab/hallc_replay_lt"
 fi
-UTILPATH="${REPLAYPATH}/UTIL_PION"
+UTILPATH="${REPLAYPATH}/UTIL_PROTON"
 cd $REPLAYPATH
 if [ ! -f "$REPLAYPATH/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
     eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/SCALERS/replay_coin_scalers.C($RUNNUMBER,${MAXEVENTS})\""
@@ -62,15 +53,19 @@ EOF
 else echo "Scaler replayfile already found for this run in $REPLAYPATH/ROOTfiles/Scalers - Skipping scaler replay step"
 fi
 sleep 5
-if [ ! -f "$REPLAYPATH/UTIL_PION/ROOTfiles/Analysis/PionLT/Pion_coin_replay_production_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
+if [ ! -f "$REPLAYPATH/UTIL_PROTON/ROOTfiles/Analysis/ProtonLT/Proton_coin_replay_production_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
-	eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\"" 
+	eval "$REPLAYPATH/hcana -l -q \"UTIL_PROTON/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\"" 
     elif [[ "${HOSTNAME}" == *"ifarm"* ]]; then
-	eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\""| tee $REPLAYPATH/UTIL_PION/REPORT_OUTPUT/Analysis/PionLT/Pion_output_coin_production_${RUNNUMBER}_${MAXEVENTS}.report
+	eval "$REPLAYPATH/hcana -l -q \"UTIL_PROTON/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\""| tee $REPLAYPATH/UTIL_PROTON/REPORT_OUTPUT/Analysis/ProtonLT/Proton_output_coin_production_${RUNNUMBER}_${MAXEVENTS}.report
     fi
-else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PION/ROOTfiles/Analysis/PionLT/ - Skipping replay step"
+else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PROTON/ROOTfiles/Analysis/ProtonLT/ - Skipping replay step"
 fi
 sleep 5
-cd "$UTILPATH/scripts/pionyield"
-eval '"Analyse_Pions.sh" Pion_coin_replay_production ${RUNNUMBER} ${MAXEVENTS}'
+cd "$UTILPATH/scripts/CoinTimePeak"
+if [ ! -f "$UTILPATH/OUTPUT/Analysis/ProtonLT/${RUNNUMBER}_{MAXEVENTS}_CTPeak_Data_HeepCoin.root" ]; then
+    python3 $UTILPATH/scripts/CoinTimePeak/src/CoinTimePeak_HeepCoin.py ${ROOTSTRING} ${RUNNUMBER} ${MAXEVENTS} 
+fi
+sleep 5
+root -b -l -q "${UTILPATH}/scripts/CoinTimePeak/PlotHeepCoinPeak.C(\"${RUNNUMBER}_-1_CTPeak_Data_HeepCoin.root\", \"${RUNNUMBER}_CTOut_HeepCoin\")"
 exit 0
