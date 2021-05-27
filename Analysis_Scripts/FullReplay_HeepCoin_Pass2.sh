@@ -1,11 +1,15 @@
 #!/bin/bash
 
+### Stephen Kay, University of Regina
+### 26/05/21
+### The analysis script used to process the Pass2 full replay for Heep coin data
+
 echo "Starting Replay script"
 echo "I take as arguments the Run Number and max number of events!"
 RUNNUMBER=$1
 MAXEVENTS=$2
 ### Check you've provided the an argument
-if [[ -z "$1" ]]; then
+if [[ $1 -eq "" ]]; then
     echo "I need a Run Number!"
     echo "Please provide a run number as input"
     exit 2
@@ -30,12 +34,16 @@ if [[ "${HOSTNAME}" = *"farm"* ]]; then
 	source /site/12gev_phys/softenv.sh 2.3
 	source /apps/root/6.18.04/setroot_CUE.bash
     fi
+    cd "/group/c-kaonlt/hcana/"
+    source "/group/c-kaonlt/hcana/setup.sh"
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh"
 elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
     REPLAYPATH="/group/c-kaonlt/USERS/${USER}/hallc_replay_lt"
     source /site/12gev_phys/softenv.sh 2.3
     source /apps/root/6.18.04/setroot_CUE.bash
+    cd "/group/c-kaonlt/hcana/"
+    source "/group/c-kaonlt/hcana/setup.sh" 
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh" 
 elif [[ "${HOSTNAME}" = *"cdaq"* ]]; then
@@ -43,8 +51,8 @@ elif [[ "${HOSTNAME}" = *"cdaq"* ]]; then
 elif [[ "${HOSTNAME}" = *"phys.uregina.ca"* ]]; then
     REPLAYPATH="/home/${USER}/work/JLab/hallc_replay_lt"
 fi
-UTILPATH="${REPLAYPATH}/UTIL_PROTON"
 cd $REPLAYPATH
+
 if [ ! -f "$REPLAYPATH/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
     eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/SCALERS/replay_coin_scalers.C($RUNNUMBER,${MAXEVENTS})\""
     cd "$REPLAYPATH/CALIBRATION/bcm_current_map"
@@ -57,18 +65,7 @@ EOF
     cd $REPLAYPATH
 else echo "Scaler replayfile already found for this run in $REPLAYPATH/ROOTfiles/Scalers - Skipping scaler replay step"
 fi
-sleep 5
-# 03/03/21 - SK, note these scripts actually need to be updated too
-if [ ! -f "$REPLAYPATH/UTIL_PROTON/ROOTfiles/Analysis/ProtonLT/Proton_coin_replay_production_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
-    if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
-	eval "$REPLAYPATH/hcana -l -q \"UTIL_PROTON/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\"" 
-    elif [[ "${HOSTNAME}" == *"ifarm"* ]]; then
-	eval "$REPLAYPATH/hcana -l -q \"UTIL_PROTON/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\""| tee $REPLAYPATH/UTIL_PROTON/REPORT_OUTPUT/Analysis/ProtonLT/Proton_output_coin_production_${RUNNUMBER}_${MAXEVENTS}.report
-    fi
-else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PROTON/ROOTfiles/Analysis/ProtonLT/ - Skipping replay step"
-fi
-sleep 5
-cd "$UTILPATH/scripts/protonyield"
-## The line below needs tweaking with the run prefix!
-eval '"Analyse_Protons.sh" Proton_coin_replay_production ${RUNNUMBER} ${MAXEVENTS}'
+sleep 15
+echo -e "\n\nStarting Replay Script\n\n"
+eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/FullReplay_HeepCoin_Pass2.C($RUNNUMBER,$MAXEVENTS)\""
 exit 0

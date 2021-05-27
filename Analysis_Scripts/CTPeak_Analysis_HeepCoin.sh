@@ -3,18 +3,13 @@
 echo "Starting Replay script"
 echo "I take as arguments the Run Number and max number of events!"
 RUNNUMBER=$1
-MAXEVENTS=$2
+MAXEVENTS=-1
+ROOTSTRING="Proton_coin_replay_production"
 ### Check you've provided the an argument
-if [[ -z "$1" ]]; then
+if [[ $1 -eq "" ]]; then
     echo "I need a Run Number!"
     echo "Please provide a run number as input"
     exit 2
-fi
-### Check if a second argument was provided, if not assume -1, if yes, this is max events
-if [[ -z "$2" ]]; then
-    MAXEVENTS=-1
-else
-    MAXEVENTS=$2
 fi
 if [[ ${USER} = "cdaq" ]]; then
     echo "Warning, running as cdaq."
@@ -58,7 +53,6 @@ EOF
 else echo "Scaler replayfile already found for this run in $REPLAYPATH/ROOTfiles/Scalers - Skipping scaler replay step"
 fi
 sleep 5
-# 03/03/21 - SK, note these scripts actually need to be updated too
 if [ ! -f "$REPLAYPATH/UTIL_PROTON/ROOTfiles/Analysis/ProtonLT/Proton_coin_replay_production_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
 	eval "$REPLAYPATH/hcana -l -q \"UTIL_PROTON/scripts/replay/replay_production_coin.C($RUNNUMBER,$MAXEVENTS)\"" 
@@ -68,7 +62,10 @@ if [ ! -f "$REPLAYPATH/UTIL_PROTON/ROOTfiles/Analysis/ProtonLT/Proton_coin_repla
 else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PROTON/ROOTfiles/Analysis/ProtonLT/ - Skipping replay step"
 fi
 sleep 5
-cd "$UTILPATH/scripts/protonyield"
-## The line below needs tweaking with the run prefix!
-eval '"Analyse_Protons.sh" Proton_coin_replay_production ${RUNNUMBER} ${MAXEVENTS}'
+cd "$UTILPATH/scripts/CoinTimePeak"
+if [ ! -f "$UTILPATH/OUTPUT/Analysis/ProtonLT/${RUNNUMBER}_{MAXEVENTS}_CTPeak_Data_HeepCoin.root" ]; then
+    python3 $UTILPATH/scripts/CoinTimePeak/src/CoinTimePeak_HeepCoin.py ${ROOTSTRING} ${RUNNUMBER} ${MAXEVENTS} 
+fi
+sleep 5
+root -b -l -q "${UTILPATH}/scripts/CoinTimePeak/PlotHeepCoinPeak.C(\"${RUNNUMBER}_-1_CTPeak_Data_HeepCoin.root\", \"${RUNNUMBER}_CTOut_HeepCoin\")"
 exit 0
