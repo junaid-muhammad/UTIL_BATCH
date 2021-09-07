@@ -30,7 +30,8 @@ historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
 ##Output batch script##                                         
 batch="${USER}_Job.txt"
 ##Input run numbers##
-inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
+#inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
+inputFile="/home/cdaq/pionLT-2021/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
 ## Tape stub
 MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
 auger="augerID.tmp"

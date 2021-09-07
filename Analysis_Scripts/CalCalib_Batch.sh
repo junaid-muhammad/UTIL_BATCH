@@ -33,12 +33,12 @@ if [[ $OPT == "HMS" ]]; then
     elif [[ $OPT == "SHMS" ]]; then
     spec="shms"
 fi
-if [[ ${USER} = "cdaq" ]]; then
-    echo "Warning, running as cdaq."
-    echo "Please be sure you want to do this."
-    echo "Comment this section out and run again if you're sure."
-    exit 2
-fi        
+#if [[ ${USER} = "cdaq" ]]; then
+#    echo "Warning, running as cdaq."
+#    echo "Please be sure you want to do this."
+#    echo "Comment this section out and run again if you're sure."
+#    exit 2
+#fi        
 # Set path depending upon hostname. Change or add more as needed  
 if [[ "${HOSTNAME}" = *"farm"* ]]; then  
     REPLAYPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt"
@@ -59,7 +59,7 @@ elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh" 
 elif [[ "${HOSTNAME}" = *"cdaq"* ]]; then
-    REPLAYPATH="/home/cdaq/hallc-online/hallc_replay_lt"
+    REPLAYPATH="/home/cdaq/pionLT-2021/hallc_replay_lt"
 elif [[ "${HOSTNAME}" = *"phys.uregina.ca"* ]]; then
     REPLAYPATH="/home/${USER}/work/JLab/hallc_replay_lt"
 fi
