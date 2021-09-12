@@ -170,6 +170,10 @@ elif [[ $OPT == "SHMS" ]]; then
     sed -i "s/pdc_tzero_per_wire.*/CALIB\/pdc_tzero_per_wire_${RUNNUMBER}.param\"/" "${REPLAYPATH}/DBASE/COIN/${OPT}_DCCalib/general_${RUNNUMBER}.param"
 fi
 
+# This is a temporary (and crappy) solution, where we force the cuts.param file specified back to whatever it is in standard.database (hdc_cuts.param and pdc_cuts.param are sym links so this should be fine)
+sed -i "hdc_cuts.*/hdc_cuts.param/" "${REPLAYPATH}/DBASE/COIN/${OPT}_DCCalib/general_${RUNNUMBER}.param"    
+sed -i "pdc_cuts.*/pdc_cuts.param/" "${REPLAYPATH}/DBASE/COIN/${OPT}_DCCalib/general_${RUNNUMBER}.param"
+
 ### Finally, replay again with our new parameter files
 cd $REPLAYPATH
 eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/CALIBRATION/"$OPT"DC_Calib_Coin_Pt2.C($RUNNUMBER,$MAXEVENTS)\""

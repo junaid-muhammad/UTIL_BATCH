@@ -24,12 +24,12 @@ else
     MAXEVENTS=$2
 fi
 
-if [[ ${USER} = "cdaq" ]]; then
-    echo "Warning, running as cdaq."
-    echo "Please be sure you want to do this."
-    echo "Comment this section out and run again if you're sure."
-    exit 2
-fi          
+#if [[ ${USER} = "cdaq" ]]; then
+#    echo "Warning, running as cdaq."
+#    echo "Please be sure you want to do this."
+#    echo "Comment this section out and run again if you're sure."
+#    exit 2
+#fi          
 
 # Set path depending upon hostname. Change or add more as needed  
 if [[ "${HOSTNAME}" = *"farm"* ]]; then  
@@ -54,19 +54,19 @@ fi
 cd $REPLAYPATH
 
 # Create and use BCM calib for file if it doesn't exist
-if [ ! -f "$REPLAYPATH/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_150000.root" ]; then
-    eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/SCALERS/replay_coin_scalers.C($RUNNUMBER,150000)\""
-    cd "$REPLAYPATH/CALIBRATION/bcm_current_map"
-    root -b<<EOF 
-.L ScalerCalib.C+
-.x run.C("${REPLAYPATH}/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_150000.root")
-.q  
-EOF
-    mv bcmcurrent_$RUNNUMBER.param $REPLAYPATH/PARAM/HMS/BCM/CALIB/bcmcurrent_$RUNNUMBER.param
-    cd $REPLAYPATH
-else echo "Scaler replayfile already found for this run in $REPLAYPATH/ROOTfiles/Scalers - Skipping scaler replay step"
-fi
-sleep 15
+#if [ ! -f "$REPLAYPATH/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_150000.root" ]; then
+#    eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/SCALERS/replay_coin_scalers.C($RUNNUMBER,150000)\""
+#    cd "$REPLAYPATH/CALIBRATION/bcm_current_map"
+#    root -b<<EOF 
+#.L ScalerCalib.C+
+#.x run.C("${REPLAYPATH}/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_150000.root")
+#.q  
+#EOF
+ #   mv bcmcurrent_$RUNNUMBER.param $REPLAYPATH/PARAM/HMS/BCM/CALIB/bcmcurrent_$RUNNUMBER.param
+ #   cd $REPLAYPATH
+#else echo "Scaler replayfile already found for this run in $REPLAYPATH/ROOTfiles/Scalers - Skipping scaler replay step"
+#fi
+#sleep 15
 # Should use a slimmer replay script in future (def files here need slimming down)
 if [ ! -f "$REPLAYPATH/ROOTfiles/Calib/HGC/coin_replay_production_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
