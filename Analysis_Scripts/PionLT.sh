@@ -29,7 +29,7 @@ fi
 
 # Set path depending upon hostname. Change or add more as needed  
 if [[ "${HOSTNAME}" = *"farm"* ]]; then  
-    REPLAYPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt"
+    REPLAYPATH="/group/c-pionlt/online_analysis/hallc_replay_lt"
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
 	source /site/12gev_phys/softenv.sh 2.3
 	source /apps/root/6.18.04/setroot_CUE.bash
@@ -52,7 +52,7 @@ cd $REPLAYPATH
 if [ ! -f "$REPLAYPATH/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_${MAXEVENTS}.root" ]; then
     eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/SCALERS/replay_coin_scalers.C($RUNNUMBER,${MAXEVENTS})\""
     cd "$REPLAYPATH/CALIBRATION/bcm_current_map"
-    root -b<<EOF 
+    root -b -l<<EOF 
 .L ScalerCalib.C+
 .x run.C("${REPLAYPATH}/ROOTfiles/Scalers/coin_replay_scalers_${RUNNUMBER}_${MAXEVENTS}.root")
 .q  
@@ -71,6 +71,25 @@ if [ ! -f "$REPLAYPATH/UTIL_PION/ROOTfiles/Analysis/PionLT/Pion_coin_replay_prod
 else echo "Replayfile already found for this run in $REPLAYPATH/UTIL_PION/ROOTfiles/Analysis/PionLT/ - Skipping replay step"
 fi
 sleep 5
-cd "$UTILPATH/scripts/pionyield"
-eval '"Analyse_Pions.sh" Pion_coin_replay_production ${RUNNUMBER} ${MAXEVENTS}'
+cd "$UTILPATH/scripts/online_pion_physics"
+
+# SJDK 21/09/21 - Calling the script below is redundant, you've already done the replays. You then call a script which tries to do ANOTHER round of replays. Just execute the python scripts directly
+#eval '"pion_prod_replay_analysis_sw.sh" Pion_coin_replay_production ${RUNNUMBER} ${MAXEVENTS}'
+################################################################################################################################                                                                                   
+
+# Python analysis and plotting scripts, skip them if the file exists
+if [ ! -f "${UTILPATH}/OUTPUT/Analysis/PionLT/${RUNNUMBER}_${MAXEVENTS}_Analysed_Data.root" ]; then
+    python3 ${UTILPATH}/scripts/online_pion_physics/pion_prod_analysis_sw.py Pion_coin_replay_production ${RUNNUMBER} ${MAXEVENTS}
+    else echo "${UTILPATH}/OUTPUT/Analysis/PionLT/${RUNNUMBER}_${MAXEVENTS}_Analysed_Data.root - already found, skipping analysis step"
+fi
+
+sleep 3
+
+#if [ ! -f "${UTILPATH}/OUTPUT/Analysis/PionLT/${RUNNUMBER}_${MAXEVENTS}_Output_Data.root" ]; then
+#    python3 ${UTILPATH}/scripts/online_pion_physics/PlotPionPhysics_sw.py Analysed_Data ${RUNNUMBER} ${MAXEVENTS}
+#else echo "${UTILPATH}/OUTPUT/Analysis/PionLT/${RUNNUMBER}_${MAXEVENTS}_Output_Data.root - already found, skipping plotting step"
+#fi
+#
+#sleep 3
+
 exit 0
