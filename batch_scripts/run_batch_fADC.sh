@@ -44,7 +44,7 @@ while true; do
                 ##Run number#
                 runNum=$line
 		##Output batch job file                                                                        
-		batch="${USER}_${runNum}_fADC_Job.txt"
+		batch="${USER}_${runNum}_Job.txt"
                 tape_file=`printf $MSSstub $runNum`
 		# Print the size of the raw .dat file (converted to GB) to screen. sed command reads line 3 of the tape stub without the leading size=
 	        TapeFileSize=$(($(sed -n '4 s/^[^=]*= *//p' < $tape_file)/1000000000)) # This line gets the SIZE of the file from the tape stub
@@ -55,11 +55,11 @@ while true; do
                 tmp=tmp
                 ##Finds number of lines of input file##
                 numlines=$(eval "wc -l < ${inputFile}")
-                echo "Job $(( $i + 2 ))/$(( $numlines ))"
+                echo "Job $(( $i + 2 ))/$(( $numlines + 1 ))"
                 echo "Running ${batch} for ${runNum}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission
-                echo "PROJECT: c-pionLT" >> ${batch} # Or whatever your project is!
+                echo "PROJECT: c-kaonlt" >> ${batch} # Or whatever your project is!
 		echo "TRACK: analysis" >> ${batch} ## Use this track for production running
 		#echo "TRACK: debug" >> ${batch} ### Use this track for testing, higher priority
                 echo "JOBNAME: PionLT_fADC_${runNum}" >> ${batch} ## Change to be more specific if you want
@@ -73,7 +73,7 @@ while true; do
                 fi
 		echo "CPU: 1" >> ${batch} ### hcana is single core, setting CPU higher will lower priority and gain you nothing!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}
-                echo "COMMAND:/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_PIONLT/scripts/luminosity/replay_fADC.sh ${runNum} ${MAXEVENTS}"  >> ${batch}
+                echo "COMMAND:/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_PION/scripts/luminosity/replay_fADC.sh ${runNum} ${MAXEVENTS}"  >> ${batch}
                 echo "MAIL: ${USER}@jlab.org" >> ${batch}
                 echo "Submitting ${batch}"
                 eval "jsub ${batch} 2>/dev/null"
