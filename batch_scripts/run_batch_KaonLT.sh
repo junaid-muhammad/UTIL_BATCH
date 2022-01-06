@@ -26,7 +26,7 @@ batch="${USER}_Job.txt"
 inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
 ## Tape stub, you can point directly to a taped file and the farm job will do the jgetting for you, don't call it in your script!                                                      
 MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
-auger="augerID.tmp"
+
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn
@@ -74,7 +74,7 @@ while true; do
                 echo "COMMAND:/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/KaonLT.sh ${runNum} ${MAXEVENTS}"  >> ${batch}
                 echo "MAIL: ${USER}@jlab.org" >> ${batch}
                 echo "Submitting batch"
-                eval "jsub ${batch} 2>/dev/null"
+                eval "swif2 add-jsub LTSep -script ${batch} 2>/dev/null"
                 echo " "
                 i=$(( $i + 1 ))
 		sleep 2

@@ -20,10 +20,10 @@ fi
 ##Output history file##
 historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
 ##Input run numbers##
-inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
+inputFile="/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
 ## Tape stub
-MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
-auger="augerID.tmp"
+MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat'
+
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn
@@ -53,10 +53,10 @@ while true; do
                 echo "Running ${batch} for ${runNum}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission##
-                echo "PROJECT: c-kaonlt" >> ${batch}
+                echo "PROJECT: c-pionlt" >> ${batch}
                 echo "TRACK: analysis" >> ${batch}
                 #echo "TRACK: debug" >> ${batch} ### Use for testing
-                echo "JOBNAME: KaonLT_${runNum}" >> ${batch}
+                echo "JOBNAME: PionLT_${runNum}" >> ${batch}
                 # Request disk space depending upon raw file size
                 echo "DISK_SPACE: "$(( $TapeFileSize * 2 ))" GB" >> ${batch}
 		if [[ $TapeFileSize -le 45 ]]; then
@@ -68,10 +68,10 @@ while true; do
                 echo "CPU: 1" >> ${batch} ### hcana single core, setting CPU higher will lower priority!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}
 		echo "TIME: 2880" >> ${batch} 
-		echo "COMMAND:/group/c-kaonlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_Pass2.sh ${runNum} ${MAXEVENTS}" >> ${batch}
+		echo "COMMAND:/group/c-kaonlt/online_analysis/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_Pass2.sh ${runNum} ${MAXEVENTS}" >> ${batch}
 		echo "MAIL: ${USER}@jlab.org" >> ${batch}
                 echo "Submitting batch"
-                eval "jsub ${batch} 2>/dev/null"
+                eval "swif2 add-jsub LTSep -script ${batch} 2>/dev/null"
                 echo " "
 		sleep 2
 		rm ${batch}

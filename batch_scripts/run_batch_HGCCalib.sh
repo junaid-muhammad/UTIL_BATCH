@@ -23,10 +23,10 @@ historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
 ##Output batch script##
 batch="${USER}_Job.txt"
 ##Input run numbers##
-inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
+inputFile="/group/c-pionltonline_analysis/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
 ## Tape stub
-MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
-auger="augerID.tmp"
+MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat'
+
 echo "Note, this script only processes calibration for a single run at a time, you may need to manually run the HGC script with a set of run numbers for better results"
 echo "See hallc_replay_lt/CALIBRATION/shms_hgcer_calib/README.md for instructions on how to chain runs together with the calibration script"
 
@@ -56,7 +56,7 @@ while true; do
                 echo "Running ${batch} for ${runNum}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission##
-                echo "PROJECT: c-kaonlt" >> ${batch}
+                echo "PROJECT: c-pionlt" >> ${batch}
                 echo "TRACK: analysis" >> ${batch}
                 echo "JOBNAME: HGCCalib_${runNum}" >> ${batch}
                 # Request disk space depending upon raw file size
@@ -70,10 +70,10 @@ while true; do
                 echo "CPU: 1" >> ${batch} ### hcana single core, setting CPU higher will lower priority!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}
 		#echo "TIME: 1" >> ${batch} 
-		echo "COMMAND:/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/HGCCalib_Batch.sh ${runNum}" >> ${batch}
+		echo "COMMAND:/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/HGCCalib_Batch.sh ${runNum}" >> ${batch}
 		echo "MAIL: ${USER}@jlab.org" >> ${batch}
                 echo "Submitting batch"
-                eval "jsub ${batch} 2>/dev/null"
+                eval "swif2 add-jsub LTSep -script ${batch} 2>/dev/null"
                 echo " "
                 i=$(( $i + 1 ))
 		if [ $i == $numlines ]; then

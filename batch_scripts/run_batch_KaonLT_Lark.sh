@@ -15,7 +15,7 @@ batch="${USER}_Job.txt" # The name of the job submission script it'll create eac
 ##Input run numbers##                                                                                                                                                                                             
 inputFile="/home/${USER}/work/JLab/hallc_replay_lt/UTIL_BATCH/InputRunLists/Carbon_ALL" # Path to your input file which is just a list of run numbers, see templates
 
-auger="augerID.tmp"
+
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn # Check you actually want to do this

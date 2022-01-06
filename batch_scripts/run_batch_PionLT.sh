@@ -21,10 +21,14 @@ fi
 ##Output history file
 historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
 ##Input run numbers
-inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
-## Tape stub, you can point directly to a taped file and the farm job will do the jgetting for you, don't call it in your script!                                                      
-MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
-auger="augerID.tmp"
+inputFile="/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
+## Tape stub, you can point directly to a taped file and the farm job will do the jgetting for you, don't call it in your script!                                        
+# The script points to a tape stub for the file you want to run, NOT the raw .dat file
+# It will get the file from tape if it is NOT in cache, if it is, it will just run              
+#MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat' - This is NOT a tape stub, this will NOT work
+MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat' 
+
+
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn
@@ -43,7 +47,7 @@ while true; do
 		batch="${USER}_${runNum}_PionLT_Job.txt"
                 tape_file=`printf $MSSstub $runNum`
 		# Print the size of the raw .dat file (converted to GB) to screen. sed command reads line 3 of the tape stub without the leading size=
-	        TapeFileSize=$(($(sed -n '4 s/^[^=]*= *//p' < $tape_file)/1000000000))
+	        TapeFileSize=$(($(sed -n '4 s/^[^=]*= *//p' < $tape_file)/1000000000)) # This line gets the SIZE of the file from the tape stub
 		if [[ $TapeFileSize == 0 ]];then
 		    TapeFileSize=2
                 fi
@@ -51,7 +55,7 @@ while true; do
                 tmp=tmp
                 ##Finds number of lines of input file##
                 numlines=$(eval "wc -l < ${inputFile}")
-                echo "Job $(( $i + 2 ))/$(( $numlines +1 ))"
+                echo "Job $(( $i + 2 ))/$(( $numlines ))"
                 echo "Running ${batch} for ${runNum}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission
@@ -67,13 +71,12 @@ while true; do
                 elif [[ $TapeFileSize -ge 45 ]]; then
                     echo "MEMORY: 4000 MB" >> ${batch}
                 fi
-		#echo "OS: general" >> ${batch} # As of 16/1/20 centos 7.2 (which centos7 defaults to) cores being phased out. General will run on first available node (which should speed it up)
 		echo "CPU: 1" >> ${batch} ### hcana is single core, setting CPU higher will lower priority and gain you nothing!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}
-                echo "COMMAND:/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/PionLT.sh ${runNum} ${MAXEVENTS}"  >> ${batch}
+                echo "COMMAND:/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/PionLT.sh ${runNum} ${MAXEVENTS}"  >> ${batch}
                 echo "MAIL: ${USER}@jlab.org" >> ${batch}
-                echo "Submitting batch"
-                eval "jsub ${batch} 2>/dev/null"
+                echo "Submitting ${batch}"
+                eval "swif2 add-jsub LTSep -script ${batch} 2>/dev/null"
                 echo " "
 		sleep 2
 		rm ${batch}

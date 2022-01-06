@@ -19,7 +19,7 @@ historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log # Creates a log file
 batch="${USER}_Job.txt" # The name of the job submission script it'll create each time
 ##Input run numbers##
 inputFile="/home/${USER}/work/JLab/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
-auger="augerID.tmp"
+
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn # Check you actually want to do this

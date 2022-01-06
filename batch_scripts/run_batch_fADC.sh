@@ -25,10 +25,10 @@ inputFile="/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_BATCH/InputRunLi
 ## Tape stub, you can point directly to a taped file and the farm job will do the jgetting for you, don't call it in your script!                                        
 # The script points to a tape stub for the file you want to run, NOT the raw .dat file
 # It will get the file from tape if it is NOT in cache, if it is, it will just run              
-#MSSstub='/lustre19/expphy/cache/hallc/c-pionlt/raw/shms_all_%05d.dat' - This is NOT a tape stub, this will NOT work
+#MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat' - This is NOT a tape stub, this will NOT work
 MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat' 
 
-auger="augerID.tmp"
+
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn
@@ -76,7 +76,7 @@ while true; do
                 echo "COMMAND:/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_PION/scripts/luminosity/replay_fADC.sh ${runNum} ${MAXEVENTS}"  >> ${batch}
                 echo "MAIL: ${USER}@jlab.org" >> ${batch}
                 echo "Submitting ${batch}"
-                eval "jsub ${batch} 2>/dev/null"
+                eval "swif2 add-jsub LTSep -script ${batch} 2>/dev/null"
                 echo " "
 		sleep 2
 		rm ${batch}
