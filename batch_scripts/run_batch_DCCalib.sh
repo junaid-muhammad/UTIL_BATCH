@@ -27,13 +27,9 @@ else
 fi
 ##Output history file##                                                                                          
 historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
-##Output batch script##                                         
-batch="${USER}_Job.txt"
 ##Input run numbers##
 inputFile="/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
 #inputFile="/home/cdaq/pionLT-2021/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
-## Tape stub
-MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat'
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn
@@ -48,6 +44,13 @@ while true; do
                 echo ""
                 ##Run number#                                                         
                 runNum=$line
+		if [[ $runNum -ge 10000 ]]; then
+		    MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat'
+		elif [[ $runNum -lt 10000 ]]; then
+		    MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
+		fi
+		##Output batch job file##
+		batch="${USER}_${runNum}_${SPEC}_DCCalib_Job.txt"
                 tape_file=`printf $MSSstub $runNum`
                 tmp=tmp
                 ##Finds number of lines of input file##                                                               

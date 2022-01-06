@@ -52,8 +52,6 @@ historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
 ##Input run numbers##
 #inputFile="${UTILPATH}/InputRunLists/Pion_Data/${RUNTYPE}_ALL_fall21"
 inputFile="/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
-## Tape stub
-MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat'
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn
@@ -67,10 +65,15 @@ while true; do
                 echo "Run number read from file: $line"
                 echo ""
                 ##Run number#
-                RUNNUMBER=$line
+                runNum=$line
+		if [[ $runNum -ge 10000 ]]; then
+		    MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat'
+		elif [[ $runNum -lt 10000 ]]; then
+		    MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
+		fi
 		##Output batch job file##
-		batch="${USER}_${RUNNUMBER}_FullReplay_${RUNTYPE}_Job.txt"
-                tape_file=`printf $MSSstub $RUNNUMBER`
+		batch="${USER}_${runNum}_FullReplay_${RUNTYPE}_Job.txt"
+                tape_file=`printf $MSSstub $runNum`
 		TapeFileSize=$(($(sed -n '4 s/^[^=]*= *//p' < $tape_file)/1000000000))
 		if [[ $TapeFileSize == 0 ]];then
                     TapeFileSize=1
@@ -80,14 +83,14 @@ while true; do
                 ##Finds number of lines of input file##
                 numlines=$(eval "wc -l < ${inputFile}")
                 echo "Job $(( $i + 2 ))/$(( $numlines +1 ))"
-                echo "Running ${batch} for ${RUNNUMBER}"
+                echo "Running ${batch} for ${runNum}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission##
 		echo "MAIL: ${USER}@jlab.org" >> ${batch}
                 echo "PROJECT: c-kaonlt" >> ${batch} # Or whatever your project is!
                 echo "TRACK: analysis" >> ${batch}
                 #echo "TRACK: debug" >> ${batch} ### Use for testing
-                echo "JOBNAME: PionLT_${RUNNUMBER}" >> ${batch}
+                echo "JOBNAME: PionLT_${runNum}" >> ${batch}
                 # Request disk space depending upon raw file size
                 echo "DISK_SPACE: "$(( $TapeFileSize * 2 ))" GB" >> ${batch}
 		if [[ $TapeFileSize -le 45 ]]; then
@@ -99,10 +102,9 @@ while true; do
                 echo "CPU: 1" >> ${batch} ### hcana single core, setting CPU higher will lower priority!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}
 		#echo "TIME: 1" >> ${batch} 
-		echo "COMMAND:${ANASCRIPT} ${RUNNUMBER} ${MAXEVENTS}" >> ${batch}
+		echo "COMMAND:${ANASCRIPT} ${runNum} ${MAXEVENTS}" >> ${batch}
                 echo "Submitting batch"
-                #eval "jsub ${batch} 2>/dev/null"
-		eval "swif2 add-jsub LTSep -script ${batch} 2>/dev/null" # Swif2 job submission, uses old jsub scripts
+ 		eval "swif2 add-jsub LTSep -script ${batch} 2>/dev/null" # Swif2 job submission, uses old jsub scripts
                 echo " "
 		sleep 2
 		rm ${batch}

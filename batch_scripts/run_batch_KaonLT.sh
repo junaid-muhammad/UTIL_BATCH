@@ -20,13 +20,8 @@ else
 fi
 ##Output history file##                                                                                            
 historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
-##Output batch script##                                                                     
-batch="${USER}_Job.txt"
 ##Input run numbers##
 inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
-## Tape stub, you can point directly to a taped file and the farm job will do the jgetting for you, don't call it in your script!                                                      
-MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
-
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn
@@ -41,6 +36,11 @@ while true; do
                 echo ""
                 ##Run number#
                 runNum=$line
+		if [[ $runNum -ge 10000 ]]; then
+		    MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat'
+		elif [[ $runNum -lt 10000 ]]; then
+		    MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
+		fi
 		##Output batch job text file##
 		batch="${USER}_${runNum}_KaonLT_Job.txt"
                 tape_file=`printf $MSSstub $runNum`

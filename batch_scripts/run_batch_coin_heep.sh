@@ -1,12 +1,12 @@
 #! /bin/bash    
 
 echo "Running as ${USER}"
-#RunList=$1
-#if [[ -z "$1" ]]; then
- #   echo "I need a run list process!"
-  #  echo "Please provide a run list as input"
-  #  exit 2
-#fi
+RunList=$1
+if [[ -z "$1" ]]; then
+    echo "I need a run list process!"
+    echo "Please provide a run list as input"
+    exit 2
+fi
 if [[ $2 -eq "" ]]; then
     MAXEVENTS=-1
 else
@@ -16,11 +16,7 @@ fi
 ##Output history file
 historyfile=hist.$( date "+%Y-%m-%d_%H-%M-%S" ).log
 ##Input run numbers
-inputFile="/home/cdaq/pionLT-2021/hallc_replay_lt/UTIL_BATCH/InputRunLists/coin_heep_9p1"
-## Tape stub, you can point directly to a taped file and the farm job will do the jgetting for you, don't call it in your script!                                                      
-#MSSstub='/mss/hallc/spring17/raw/shms_all_%05d.dat'
-MSSstub='/home/cdaq/pionLT-2021/hallc_replay_lt/raw.volatile/shms_all_%5d.dat'
-auger="augerID.tmp"
+inputFile="/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn
@@ -35,8 +31,13 @@ while true; do
                 echo ""
                 ##Run number#
                 runNum=$line
+		if [[ $runNum -ge 10000 ]]; then
+		    MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat'
+		elif [[ $runNum -lt 10000 ]]; then
+		    MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
+		fi
 		##Output batch job file                                                                        
-		batch="${USER}_${runNum}_PionLT_Job.txt"
+		batch="${USER}_${runNum}_HeepCoin.txt"
                 tape_file=`printf $MSSstub $runNum`
 		# Print the size of the raw .dat file (converted to GB) to screen. sed command reads line 3 of the tape stub without the leading size=
 	        TapeFileSize=$(($(sed -n '4 s/^[^=]*= *//p' < $tape_file)/1000000000))
