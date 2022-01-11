@@ -50,13 +50,13 @@ while true; do
 		    TapeFileSize=2
                 fi
 		echo "Raw .dat file is "$TapeFileSize" GB"
-                tmp=tmp
                 ##Finds number of lines of input file##
                 numlines=$(eval "wc -l < ${inputFile}")
                 echo "Job $(( $i + 2 ))/$(( $numlines ))"
                 echo "Running ${batch} for ${runNum}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission
+                echo "MAIL: ${USER}@jlab.org" >> ${batch}
                 echo "PROJECT: c-kaonlt" >> ${batch} # Or whatever your project is!
 		echo "TRACK: analysis" >> ${batch} ## Use this track for production running
 		#echo "TRACK: debug" >> ${batch} ### Use this track for testing, higher priority
@@ -72,7 +72,6 @@ while true; do
 		echo "CPU: 1" >> ${batch} ### hcana is single core, setting CPU higher will lower priority and gain you nothing!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}
                 echo "COMMAND:/group/c-pionlt/online_analysis/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/PionLT.sh ${runNum} ${MAXEVENTS}"  >> ${batch}
-                echo "MAIL: ${USER}@jlab.org" >> ${batch}
                 echo "Submitting ${batch}"
                 eval "swif2 add-jsub LTSep -script ${batch} 2>/dev/null"
                 echo " "
