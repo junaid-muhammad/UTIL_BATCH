@@ -63,11 +63,16 @@ print("Running as %s on %s, hallc_replay_lt path assumed as %s" % (USER, HOST, R
 if os.path.isfile(inputFilePath) == False :
     print("!!!!! ERROR !!!!!\n "+inputFilePath+" not found, check the file exists and try again\n!!!!! ERROR !!!!!")
     sys.exit(2)
+    
+inputFile = open(inputFilePath)
+MaxLine=len(inputFile.readlines()) # Counter to determine number of lines in the file
+inputFile.seek(0, 0) # Go back to start of file
 
+LineNum=0
 # Prompt yes/no, create batch job scripts and process each if yes, exit if no - could be improved, works for now
 while yes_or_no("Do you wish to begin a new batch submission?"):
-    inputFile = open(inputFilePath)
     for line in inputFile:
+        LineNum+=1
         runNum= int(line)
         if runNum >= 10000 :
             MSSstub=('/mss/hallc/c-pionlt/raw/shms_all_%05d.dat' % float(runNum))
@@ -86,7 +91,7 @@ while yes_or_no("Do you wish to begin a new batch submission?"):
         batchfile.write("PROJECT: c-kaonlt\n")
         batchfile.write("TRACK: analysis\n")
         JobName = "PionLT_%05d" % float(runNum)
-        print("Running "+batch+" as "+JobName+" for run "+str(runNum))
+        print("Creating job "+batch+" as "+JobName+" for run "+str(runNum))
         print("Raw .dat file for run "+str(runNum)+" is "+str(TapeFileSize)+" GB")
         batchfile.write("JOBNAME: "+JobName+"\n")
         # Request double the tape file size in space, for trunctuated replays edit down as needed
@@ -101,7 +106,7 @@ while yes_or_no("Do you wish to begin a new batch submission?"):
         batchfile.write("COMMAND:"+BATCHPATH+"/Analysis_Scripts/run_PionLT.sh "+"Prod "+str(runNum)+" "+MAXEVENTS+"\n") # Testing using the run PionLT script
         #batchfile.write("COMMAND:"+BATCHPATH+"/Analysis_Scripts/Batch_Template.sh "+str(runNum)+" "+MAXEVENTS+"\n") # Insert your script and relevant arguments at the end
         batchfile.close()
-        print("Submitting job - "+JobName)
+        print("Submitting job "+str(LineNum)+"/"+str(MaxLine)+" - "+JobName)
         subprocess.call(["swif2", "add-jsub", "LTSep", "-script", batch])
         print("\n")
         time.sleep(2)
