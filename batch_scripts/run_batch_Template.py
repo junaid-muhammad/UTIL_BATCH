@@ -7,6 +7,8 @@
 ### This SHOULD be more flexible in terms of pathing - it will grab paths using the ltsep package
 ### Requires the ltsep package which is available in UTIL_PION!
 
+# Execute with python3 run_batch_Template.py RUNLIST MAXEVENTS(optional)
+
 # Import relevant packages
 import sys, math, os, subprocess, time
 
