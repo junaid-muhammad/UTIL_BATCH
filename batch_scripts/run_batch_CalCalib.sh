@@ -58,7 +58,7 @@ while true; do
                 echo "Running ${batch} for ${runNum}"
                 cp /dev/null ${batch}
                 ##Creation of batch script for submission##                                       
-		echo "PROJECT: c-pionlt" >> ${batch} # Or whatever your project is!
+		echo "PROJECT: c-kaonlt" >> ${batch} # Or whatever your project is!
 		echo "TRACK: analysis" >> ${batch} ## Use this track for production running
                 #echo "TRACK: debug" >> ${batch} ### Use this track for testing, higher priority
                 echo "JOBNAME: CalCalib${SPPEC}_${runNum}" >> ${batch} ## Change to be more specific if you want
