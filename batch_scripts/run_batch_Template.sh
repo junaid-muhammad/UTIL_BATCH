@@ -94,6 +94,7 @@ while true; do
 		fi
 		done < "$inputFile"
 	     )
+	    eval 'swif2 run'
 	    break;;
         [Nn]* ) 
 	        exit;;
