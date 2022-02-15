@@ -91,7 +91,7 @@ while true; do
 		fi
 		done < "$inputFile"
 	     )
-	    eval 'swif2 run'
+	    eval 'swif2 run LTSep'
 	    break;;
         [Nn]* ) 
 	        exit;;
