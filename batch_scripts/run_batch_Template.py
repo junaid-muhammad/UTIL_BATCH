@@ -59,7 +59,7 @@ inputFilePath = BATCHPATH+"/InputRunLists/"+RunList
 print("Running as %s on %s, hallc_replay_lt path assumed as %s" % (USER, HOST, REPLAYPATH))
 
 # 15/02/22 - SJDK - Added the swif2 workflow as a variable you can specify here
-Workflow = "LTSep" # Change this as desired, could be changed to an input argument if you really want
+Workflow = "LTSep_"+USER # Change this as desired, could be changed to an input argument if you really want
 
 ################################################################################################################################################
 
