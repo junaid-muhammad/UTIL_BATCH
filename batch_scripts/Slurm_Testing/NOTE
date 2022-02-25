@@ -1,5 +1,0 @@
-SJDK 06/01/22
-
-I was testing switching the auger job submission scripts over to slurm, but there's one major issue with this.
-Slurm cannot handle the "INPUT_FILES" tag in the same way that Auger can. As such, it requires the input files to already be present before execution.
-There's no "nice" way to do this, so I decided to drop my work on switching to slurm. If they add in functionality for this in the future, we could look at this.
