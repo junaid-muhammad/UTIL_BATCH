@@ -47,4 +47,4 @@ cd $REPLAYPATH
 
 echo -e "\n\nStarting Replay Script\n\n"
 eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/replay_production_coin_hElec_pProt.C($RUNNUMBER,$MAXEVENTS)\""
-exit 1
+exit 0
