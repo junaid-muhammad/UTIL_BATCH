@@ -8,6 +8,19 @@
 ### Major issue will be with which db file it grabs, also should probably use new cal calibration and put OUTPUT in
 ### Also, do the folders it's outputing to exist by default? If not they should be checked and created as needed
 
+#####################################################################################################
+########################################## !!! WARNING !!! ##########################################
+#####################################################################################################
+
+# SJDK - 20/05/22
+# This script is HIGHLY outdated. It attempts to copy a VERY outdated database file for the purposes of making a new DB file for you
+# This database file is now archived.
+# If you wish to use this script, please change the DB file it is copying, make sure you understand what it is trying to do too!
+
+#####################################################################################################
+########################################## !!! WARNING !!! ##########################################
+#####################################################################################################
+
 RUNNUMBER=$1
 OPT=$2
 ### Check you've provided the first argument  

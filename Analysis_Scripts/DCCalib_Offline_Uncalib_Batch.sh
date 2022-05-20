@@ -8,6 +8,19 @@
 ### SK 30/03/21 - This works perfectly fine BUT it bases the calibration off the online (uncalibrated) runs, the new version is designed to work off any DC calibration
 ### This is just here for completeness, I will remove it when it gets replaced satisfactorily
 
+#####################################################################################################
+########################################## !!! WARNING !!! ##########################################
+#####################################################################################################
+
+# SJDK - 20/05/22
+# This script is HIGHLY outdated. It attempts to copy a VERY outdated database file for the purposes of making a new DB file for you
+# This database file is now archived.
+# If you wish to use this script, please change the DB file it is copying, make sure you understand what it is trying to do too!
+
+#####################################################################################################
+########################################## !!! WARNING !!! ##########################################
+#####################################################################################################
+
 RUNNUMBER=$1
 OPT=$2
 ### Check you've provided the first argument
