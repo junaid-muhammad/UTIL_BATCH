@@ -7,22 +7,34 @@
 
 echo "Running as ${USER}"
 ### Check if an argument was provided, if not assume -1, if yes, this is max events
-RunList=$1
-if [[ -z "$1" ]]; then
+
+RunType=$1
+
+RunList=$2
+if [[ -z "$2" ]]; then
     echo "I need a run list process!"
     echo "Please provide a run list as input"
     exit 2
 fi
-if [[ $2 -eq "" ]]; then
+if [[ $3 -eq "" ]]; then
     MAXEVENTS=-1
 else
-    MAXEVENTS=$2
+    MAXEVENTS=$3
 fi
 
 # 15/02/22 - SJDK - Added the swif2 workflow as a variable you can specify here
 Workflow="LTSep_${USER}" # Change this as desired
 # Input run numbers, this just points to a file which is a list of run numbers, one number per line
-inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/${RunList}"
+inputFile="/group/c-kaonlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/KaonLT_2018_2019/${RunList}"
+
+if [[ $RunType -eq "Prod" ]]; then
+    ANASCRIPT="/group/c-kaonlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_KaonLT_Phys_Prod_Batch.sh"
+elif [[ $RunType -eq "HeeP" ]]; then
+    ANASCRIPT="/group/c-kaonlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_KaonLT_HeeP_Coin_Batch.sh"
+else
+    echo "${RunType} is not a valid run type"
+    exit 1
+fi
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn
@@ -38,7 +50,7 @@ while true; do
                 ##Run number#
                 runNum=$line
 		if [[ $runNum -ge 10000 ]]; then
-		    MSSstub='/mss/hallc/c-pionlt/raw/shms_all_%05d.dat'
+		    MSSstub='/mss/hallc/c-kaonlt/raw/shms_all_%05d.dat'
 		elif [[ $runNum -lt 10000 ]]; then
 		    MSSstub='/mss/hallc/spring17/raw/coin_all_%05d.dat'
 		fi
@@ -72,7 +84,7 @@ while true; do
                 fi
 		echo "CPU: 1" >> ${batch} ### hcana is single core, setting CPU higher will lower priority and gain you nothing!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}
-                echo "COMMAND:/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/KaonLT.sh ${runNum} ${MAXEVENTS}"  >> ${batch}
+		echo "COMMAND:${ANASCRIPT} ${runNum} ${MAXEVENTS}" >> ${batch}
                 echo "MAIL: ${USER}@jlab.org" >> ${batch}
                 echo "Submitting batch"
                 eval "swif2 add-jsub ${Workflow} -script ${batch} 2>/dev/null"
