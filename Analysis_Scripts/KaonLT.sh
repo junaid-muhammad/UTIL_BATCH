@@ -3,7 +3,7 @@
 #
 # Description:
 # ================================================================
-# Time-stamp: "2022-04-18 16:43:33 trottar"
+# Time-stamp: "2022-06-30 01:25:45 trottar"
 # ================================================================
 #
 # Author:  Richard L. Trotta III <trotta@cua.edu>
@@ -54,15 +54,15 @@ TARGET=$2
 RUNNUMBER=$3
 MAXEVENTS=$4
 # Need to change these a little, should check whether arguments are good or not REGARDLESS of whether they're blank
-if [[ -z "$1" || ! "$RUNTYPE" =~ Prod|Lumi|HeePSing|HeePCoin|fADC|Optics ]]; then # Check the 2nd argument was provided and that it's one of the valid options
+if [[ -z "$1" || ! "$RUNTYPE" =~ Prod|Lumi|HeePSing|HeePCoin|fADC|Optics|HGCer ]]; then # Check the 2nd argument was provided and that it's one of the valid options
     echo ""
     echo "I need a valid run type"
     while true; do
 	echo ""
-	read -p "Please type in a run type from - Prod - Lumi - HeePSing - HeePCoin - fADC - Optics - Case sensitive! - or press ctrl-c to exit : " RUNTYPE
+	read -p "Please type in a run type from - Prod - Lumi - HeePSing - HeePCoin - fADC - Optics - HGCer - Case sensitive! - or press ctrl-c to exit : " RUNTYPE
 	case $RUNTYPE in
 	    '');; # If blank, prompt again
-	    'Prod'|'Lumi'|'HeePSing'|'HeePCoin'|'Optics'|'fADC') break;; # If a valid option, break the loop and continue
+	    'Prod'|'Lumi'|'HeePSing'|'HeePCoin'|'Optics'|'fADC'|'HGCer') break;; # If a valid option, break the loop and continue
 	esac
     done
 fi
@@ -100,7 +100,7 @@ if [[ $RUNTYPE == "Prod" ]]; then
     eval '"${UTILPATH}/scripts/online_physics/KaonLT/kaon_prod_replay_analysis_sw.sh" ${RUNNUMBER} ${TARGET} ${MAXEVENTS}'
 elif [[ $RUNTYPE == "Lumi" ]]; then
     echo "Running luminosity analysis script - ${UTILPATH}/scripts/luminosity/replay_lumi.sh"
-    eval '"${UTILPATH}/scripts/luminosity/replay_lumi.sh" ${RUNNUMBER} ${MAXEVENTS}'
+    eval '"${UTILPATH}/scripts/luminosity/replay_lumi.sh" -t ${RUNNUMBER} ${MAXEVENTS}'
 elif [[ $RUNTYPE == "HeePSing" ]]; then
     echo "Running HeeP Singles analysis script - ${UTILPATH}/scripts/heep/sing_heepYield.sh"
     eval '"${UTILPATH}/scripts/heep/sing_heepYield.sh" hms ${RUNNUMBER} ${MAXEVENTS}'
@@ -114,4 +114,11 @@ elif [[ $RUNTYPE == "fADC" ]]; then
 elif [[ $RUNTYPE == "Optics" ]]; then
     echo "Running optics analysis script - "
     eval '"${UTILPATH}/scripts/optics/run_optics.sh" ${RUNNUMBER} ${MAXEVENTS}'
+elif [[ $RUNTYPE == "HGCer" ]]; then
+    echo "Running HGCer analysis script - "
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    echo "Run number read from file: $RUNNUMBER"
+    echo ""
+    cd "${UTILPATH}/scripts/efficiency/src/hgcer"
+    python3 hgcer.py Kaon_coin_replay_production $RUNNUMBER $MAXEVENTS
 fi
