@@ -3,7 +3,7 @@
 #
 # Description:
 # ================================================================
-# Time-stamp: "2023-02-13 11:17:09 trottar"
+# Time-stamp: "2023-02-15 10:39:26 trottar"
 # ================================================================
 #
 # Author:  Richard L. Trotta III <trotta@cua.edu>
@@ -206,8 +206,8 @@ else
 fi
 
 if [[ $a_flag = 'true' ]]; then
-    echo "Running production analysis script - ${LTANAPATH}/ana_Prod.sh"
-    eval '"${LTANAPATH}/ana_Prod.sh" ${EPSILON} ${PHIVAL} ${Q2} ${W} ${TARGET} ${RUNNUMBER}'
+    echo "Running production analysis script - ${LTANAPATH}/applyCuts_Prod.sh"
+    eval '"${LTANAPATH}/applyCuts_Prod.sh" ${EPSILON} ${PHIVAL} ${Q2} ${W} ${TARGET} ${RUNNUMBER}'
 else
     if [[ $RUNTYPE == "Prod" ]]; then
 	echo "Running production analysis script - ${UTILPATH}/scripts/online_physics/KaonLT/kaon_prod_replay_analysis_sw.sh"
