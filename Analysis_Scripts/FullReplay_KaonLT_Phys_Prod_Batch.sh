@@ -24,7 +24,7 @@ if [[ "${HOSTNAME}" = *"farm"* ]]; then
 	#source /site/12gev_phys/softenv.sh 2.4
 	source /apps/root/6.18.04/setroot_CUE.bash
     fi
-    cd "/group/c-pionlt/hcana/"
+    cd "/group/c-kaonlt/hcana/"
     source "/group/c-kaonlt/hcana/setup.sh"
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh"
@@ -32,7 +32,7 @@ elif [[ "${HOSTNAME}" = *"qcd"* ]]; then
     REPLAYPATH="/group/c-kaonlt/USERS/${USER}/hallc_replay_lt"
     #source /site/12gev_phys/softenv.sh 2.4
     source /apps/root/6.18.04/setroot_CUE.bash
-    cd "/group/c-pionlt/hcana/"
+    cd "/group/c-kaonlt/hcana/"
     source "/group/c-kaonlt/hcana/setup.sh" 
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh" 
@@ -44,5 +44,5 @@ fi
 cd $REPLAYPATH
 
 echo -e "\n\nStarting Replay Script\n\n"
-eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/FullReplay_KaonLT_Phys_Prod.C($RUNNUMBER,$MAXEVENTS)\""
+eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/PionLT_REPLAY/FullReplay_PionLT_Phys_Prod.C($RUNNUMBER,$MAXEVENTS)\""
 exit 0

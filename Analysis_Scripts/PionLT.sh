@@ -2,15 +2,11 @@
 
 #
 # Description:
-# ================================================================
-# Time-stamp: "2021-09-28 17:53:52 trottar"
-# ================================================================
-#
-# Author:  Richard L. Trotta III <trotta@cua.edu>
-#
-# Copyright (c) trottar
-#
-
+# ======================================================
+# Created:  Muhammad Junaid
+# University of Regina, CA
+# Date :18-Dec-2023
+# ======================================================
 # Stephen JD Kay - University of Regina - 27/08/21
 # This script should be executed on cdaql1 with the required commands to execute the relevant physics analysis
 # Arguments should be run number, type of run and target type
