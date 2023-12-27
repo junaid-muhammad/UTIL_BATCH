@@ -7,19 +7,19 @@
 echo "Running as ${USER}"
 ### Check if an argument was provided, if not assume -1, if yes, this is max events
 
-RunType=$1
+RUNTYPE=$1
 RunList=$2
 MAXEVENTS=$3
 
-if [[ -z "$1" || ! "$RUNTYPE" =~ Prod|Lumi|HeePSingHMS|HeePSingSHMS|HeePCoin|pTRIG6|fADC|Optics ]]; then # Check the 2nd argument was provided and that it's one of the valid options
+if [[ -z "$1" || ! "$RUNTYPE" =~ Prod|Lumi|LumiCoin|HeePSingHMS|HeePSingSHMS|HeePCoin|pTRIG6|fADC|Optics ]]; then # Check the 2nd argument was provided and that it's one of the valid options
     echo ""
     echo "I need a valid run type"
     while true; do
         echo ""
-        read -p "Please type in a run type from - Prod - Lumi - HeePSingHMS - HeePSingSHMS - HeePCoin - pTRIG6 - fADC - Optics  Case sensitive! - or press ctrl-c to exit : " RUNTYPE
+        read -p "Please type in a run type from - Prod - Lumi - LumiCoin - HeePSingHMS - HeePSingSHMS - HeePCoin - pTRIG6 - fADC - Optics  Case sensitive! - or press ctrl-c to exit : " RUNTYPE
         case $RUNTYPE in
             '');; # If blank, prompt again
-            'Prod'|'Lumi'|'HeePSingHMS'|'HeePSingSHMS'|'HeePCoin'|'pTRIG6'|'Optics'|'fADC') break;; # If a valid option, break the loop and continue
+            'Prod'|'Lumi'|'LumiCoin'|'HeePSingHMS'|'HeePSingSHMS'|'HeePCoin'|'pTRIG6'|'Optics'|'fADC') break;; # If a valid option, break the loop and continue
         esac
     done
 fi
@@ -40,24 +40,34 @@ Workflow="LTSep_${USER}" # Change this as desired
 # Input run numbers, this just points to a file which is a list of run numbers, one number per line
 inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/Production/${RunList}"
 
-if [[ $RunType -eq "Prod" ]]; then
+if [[ $RUNTYPE -eq "Prod" ]]; then
+    echo "Running production analysis script - ${RUNTYPE}"
     ANASCRIPT="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_PionLT_Phys_Prod_Batch.sh"
-elif [[ $RunType -eq "Lumi" ]]; then
+elif [[ $RUNTYPE -eq "Lumi" ]]; then
+    echo "Running production analysis script - ${RUNTYPE}"
     ANASCRIPT="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_PionLT_Lumi_Batch.sh"
-elif [[ $RunType -eq "HeePSingHMS" ]]; then
+elif [[ $RUNTYPE -eq "LumiCoin" ]]; then
+    echo "Running production analysis script - ${RUNTYPE}"
+    ANASCRIPT="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_PionLT_Lumi_Coin_Batch.sh"
+elif [[ $RUNTYPE -eq "HeePSingHMS" ]]; then
+    echo "Running production analysis script - ${RUNTYPE}"
     ANASCRIPT="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_PionLT_HeeP_Sing_HMS_Batch.sh"
-elif [[ $RunType -eq "HeePSingSHMS" ]]; then
+elif [[ $RUNTYPE -eq "HeePSingSHMS" ]]; then
+    echo "Running production analysis script - ${RUNTYPE}"
     ANASCRIPT="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_PionLT_HeeP_Sing_SHMS_Batch.sh"
-elif [[ $RunType -eq "HeePCoin" ]]; then
+elif [[ $RUNTYPE -eq "HeePCoin" ]]; then
+    echo "Running production analysis script - ${RUNTYPE}"
     ANASCRIPT="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_PionLT_HeeP_Coin_Batch.sh"
-elif [[ $RunType -eq "pTRIG6" ]]; then
+elif [[ $RUNTYPE -eq "pTRIG6" ]]; then
+    echo "Running production analysis script - ${RUNTYPE}"
     ANASCRIPT="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_PionLT_Phys_Prod_pTRIG6_Batch.sh"
-#elif [[ $RunType -eq "fADC" ]]; then
+
+#elif [[ $RUNTYPE -eq "fADC" ]]; then
 #    ANASCRIPT="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_PionLT_HeeP_Coin_Batch.sh"
-#elif [[ $RunType -eq "Optics" ]]; then
+#elif [[ $RUNTYPE -eq "Optics" ]]; then
 #    ANASCRIPT="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/Analysis_Scripts/FullReplay_PionLT_HeeP_Coin_Batch.sh"
 else
-    echo "${RunType} is not a valid run type"
+    echo "${RUNTYPE} is not a valid run type"
     exit 1
 fi
 
@@ -98,7 +108,7 @@ while true; do
                 echo "PROJECT: c-kaonlt" >> ${batch} # Or whatever your project is!
 		echo "TRACK: analysis" >> ${batch} ## Use this track for production running
 		#echo "TRACK: debug" >> ${batch} ### Use this track for testing, higher priority
-                echo "JOBNAME: PionLT_${runNum}" >> ${batch} ## Change to be more specific if you want
+                echo "JOBNAME: PionLT_${RUNTYPE}_${runNum}" >> ${batch} ## Change to be more specific if you want
 		# Request double the tape file size in space, for trunctuated replays edit down as needed
 		# Note, unless this is set typically replays will produce broken root files
 		echo "DISK_SPACE: "$(( $TapeFileSize * 2 ))" GB" >> ${batch}
