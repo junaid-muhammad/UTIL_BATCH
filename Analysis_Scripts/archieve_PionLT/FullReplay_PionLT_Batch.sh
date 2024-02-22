@@ -39,21 +39,21 @@ echo "Starting physics analysis of PionLT data"
 echo "Required arguments are run type, run number and max events"
 echo ""
 echo "Run number must be a positive integer value"
-echo "Run type must be one of - Prod - LumiHMS - LumiSHMS - LumiCoin - HeePSingHMS - HeePSingSHMS - HeePCoin - pTRIG6 - Case sensitive!"
+echo "Run type must be one of - Prod - LumiHMS - LumiSHMS - HeePSingHMS - HeePSingSHMS - HeePCoin - pTRIG6 - Case sensitive!"
 
 RUNTYPE=$1
 RUNNUMBER=$2
 MAXEVENTS=$3
 # Need to change these a little, should check whether arguments are good or not REGARDLESS of whether they're blank
-if [[ -z "$1" || ! "$RUNTYPE" =~ Prod|LumiHMS|LumiSHMS|LumiCoin|HeePSingHMS|HeePSingSHMS|HeePCoin|pTRIG6 ]]; then # Check the 2nd argument was provided and that it's one of the valid options
+if [[ -z "$1" || ! "$RUNTYPE" =~ Prod|LumiHMS|LumiSHMS|HeePSingHMS|HeePSingSHMS|HeePCoin|pTRIG6 ]]; then # Check the 2nd argument was provided and that it's one of the valid options
     echo ""
     echo "I need a valid run type"
     while true; do
 	echo ""
-	read -p "Please type in a run type from - Prod - LumiHMS - LumiSHMS - LumiCoin - HeePSingHMS - HeePSingSHMS - HeePCoin - pTRIG6 - Case sensitive! - or press ctrl-c to exit : " RUNTYPE
+	read -p "Please type in a run type from - Prod - LumiHMS - LumiSHMS - HeePSingHMS - HeePSingSHMS - HeePCoin - pTRIG6 - Case sensitive! - or press ctrl-c to exit : " RUNTYPE
 	case $RUNTYPE in
 	    '');; # If blank, prompt again
-	    'Prod'|'LumiHMS'|'LumiSHMS'|'LumiCoin'|'HeePSingHMS'|'HeePSingSHMS'|'HeePCoin'|'pTRIG6') break;; # If a valid option, break the loop and continue
+	    'Prod'|'LumiHMS'|'LumiSHMS'|'HeePSingHMS'|'HeePSingSHMS'|'HeePCoin'|'pTRIG6') break;; # If a valid option, break the loop and continue
 	esac
     done
 fi
@@ -91,14 +91,11 @@ elif [[ $RUNTYPE == "HeePSingSHMS" ]]; then
     echo "Running SHMS HeeP Singles analysis script - ${RUNTYPE}"
     eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_HeeP_Sing_SHMS.C($RUNNUMBER,$MAXEVENTS)\""
 elif [[ $RUNTYPE == "LumiHMS" ]]; then
-    echo "Running Luminosity HMS analysis script - ${RUNTYPE}"
+    echo "Running Luminosity analysis script - ${RUNTYPE}"
     eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_Lumi_HMS.C($RUNNUMBER,$MAXEVENTS)\""
 elif [[ $RUNTYPE == "LumiSHMS" ]]; then
-    echo "Running Luminosity SHMS analysis script - ${RUNTYPE}"
+    echo "Running luminosity Coin analysis script - ${RUNTYPE}"
     eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_Lumi_SHMS.C($RUNNUMBER,$MAXEVENTS)\""
-elif [[ $RUNTYPE == "LumiCoin" ]]; then
-    echo "Running Lumi Coin analysis script - ${RUNTYPE}"
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_Lumi_Coin.C($RUNNUMBER,$MAXEVENTS)\""
 elif [[ $RUNTYPE == "pTRIG6" ]]; then
     echo "Running production pTRIG6 analysis script - ${RUNTYPE}"
     eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_Phys_Prod_pTRIG6.C($RUNNUMBER,$MAXEVENTS)\""

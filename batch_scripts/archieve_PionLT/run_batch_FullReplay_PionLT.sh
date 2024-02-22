@@ -14,15 +14,15 @@ echo "Running as ${USER}"
 RUNTYPE=$1
 RunList=$2
 MAXEVENTS=$3
-if [[ -z "$1" || ! "$RUNTYPE" =~ Prod|LumiHMS|LumiSHMS|LumiCoin|HeePSingHMS|HeePSingSHMS|HeePCoin|pTRIG6 ]]; then # Check the 2nd argument was provided and that it's one of the valid options
+if [[ -z "$1" || ! "$RUNTYPE" =~ Prod|LumiHMS|LumiSHMS|HeePSingHMS|HeePSingSHMS|HeePCoin|pTRIG6 ]]; then # Check the 2nd argument was provided and that it's one of the valid options
     echo ""
     echo "I need a valid run type"
     while true; do
 	echo ""
-	read -p "Please type in a run type from - Prod - LumiHMS - LumiSHMS - LumiCoin - HeePSingHMS - HeePSingSHMS - HeePCoin - pTRIG6 - Case sensitive! - or press ctrl-c to exit : " RUNTYPE
+	read -p "Please type in a run type from - Prod - LumiHMS - LumiSHMS - HeePSingHMS - HeePSingSHMS - HeePCoin - pTRIG6 - Case sensitive! - or press ctrl-c to exit : " RUNTYPE
 	case $RUNTYPE in
 	    '');; # If blank, prompt again
-	    'Prod'|'LumiHMS'|'LumiSHMS'|'LumiCoin'|'HeePSingHMS'|'HeePSingSHMS'|'HeePCoin'|'pTRIG6') break;; # If a valid option, break the loop and continue
+	    'Prod'|'LumiHMS'|'LumiSHMS'|'HeePSingHMS'|'HeePSingSHMS'|'HeePCoin'|'pTRIG6') break;; # If a valid option, break the loop and continue
 	esac
     done
 fi
