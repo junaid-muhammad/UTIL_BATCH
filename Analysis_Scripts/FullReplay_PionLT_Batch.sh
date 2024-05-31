@@ -14,7 +14,9 @@ if [[ "${HOSTNAME}" = *"farm"* ]]; then
     REPLAYPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt"
     if [[ "${HOSTNAME}" != *"ifarm"* ]]; then
 	#source /site/12gev_phys/softenv.sh 2.4
-	source /apps/root/6.18.04/setroot_CUE.bash
+ 	#source /apps/root/6.18.04/setroot_CUE.bash
+        module use /cvmfs/oasis.opensciencegrid.org/jlab/scicomp/sw/el9/modulefiles
+        module load root/6.28.10-gcc11.3.1
     fi
     cd "$REPLAYPATH"
     source "$REPLAYPATH/setup.sh"
@@ -80,27 +82,27 @@ echo -e "\nStarting Replay Script\n"
 
 if [[ $RUNTYPE == "Prod" ]]; then
     echo "Running production analysis script - ${RUNTYPE}"
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_Phys_Prod.C($RUNNUMBER,$MAXEVENTS)\""
+    eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/PionLT_REPLAY/FullReplay_PionLT_Phys_Prod.C($RUNNUMBER,$MAXEVENTS)\""
 elif [[ $RUNTYPE == "HeePCoin" ]]; then
     echo "Running HeeP Coin analysis script - ${RUNTYPE}"
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_HeeP_Coin.C($RUNNUMBER,$MAXEVENTS)\""
+    eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/PionLT_REPLAY/FullReplay_PionLT_HeeP_Coin.C($RUNNUMBER,$MAXEVENTS)\""
 elif [[ $RUNTYPE == "HeePSingHMS" ]]; then
     echo "Running HMS HeeP Singles analysis script - ${RUNTYPE}"
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_HeeP_Sing_HMS.C($RUNNUMBER,$MAXEVENTS)\""
+    eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/PionLT_REPLAY/FullReplay_PionLT_HeeP_Sing_HMS.C($RUNNUMBER,$MAXEVENTS)\""
 elif [[ $RUNTYPE == "HeePSingSHMS" ]]; then
     echo "Running SHMS HeeP Singles analysis script - ${RUNTYPE}"
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_HeeP_Sing_SHMS.C($RUNNUMBER,$MAXEVENTS)\""
+    eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/PionLT_REPLAY/FullReplay_PionLT_HeeP_Sing_SHMS.C($RUNNUMBER,$MAXEVENTS)\""
 elif [[ $RUNTYPE == "LumiHMS" ]]; then
     echo "Running Luminosity HMS analysis script - ${RUNTYPE}"
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_Lumi_HMS.C($RUNNUMBER,$MAXEVENTS)\""
+    eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/PionLT_REPLAY/FullReplay_PionLT_Lumi_HMS.C($RUNNUMBER,$MAXEVENTS)\""
 elif [[ $RUNTYPE == "LumiSHMS" ]]; then
     echo "Running Luminosity SHMS analysis script - ${RUNTYPE}"
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_Lumi_SHMS.C($RUNNUMBER,$MAXEVENTS)\""
+    eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/PionLT_REPLAY/FullReplay_PionLT_Lumi_SHMS.C($RUNNUMBER,$MAXEVENTS)\""
 elif [[ $RUNTYPE == "LumiCoin" ]]; then
     echo "Running Lumi Coin analysis script - ${RUNTYPE}"
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_Lumi_Coin.C($RUNNUMBER,$MAXEVENTS)\""
+    eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/PionLT_REPLAY/FullReplay_PionLT_Lumi_Coin.C($RUNNUMBER,$MAXEVENTS)\""
 elif [[ $RUNTYPE == "pTRIG6" ]]; then
     echo "Running production pTRIG6 analysis script - ${RUNTYPE}"
-    eval "$REPLAYPATH/hcana -l -q \"UTIL_PION/scripts/replay/PionLT/FullReplay_PionLT_Phys_Prod_pTRIG6.C($RUNNUMBER,$MAXEVENTS)\""
+    eval "$REPLAYPATH/hcana -l -q \"SCRIPTS/COIN/PRODUCTION/PionLT_REPLAY/FullReplay_PionLT_Phys_Prod_pTRIG6.C($RUNNUMBER,$MAXEVENTS)\""
 fi
 exit 0

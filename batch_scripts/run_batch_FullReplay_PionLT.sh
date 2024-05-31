@@ -1,4 +1,6 @@
 #! /bin/bash
+#SBATCH --constraint=el9
+#srun hostname
 
 #
 # Description:
@@ -43,6 +45,7 @@ ANASCRIPT="'${UTILPATH}/Analysis_Scripts/FullReplay_PionLT_Batch.sh' ${RUNTYPE}"
 Workflow="LTSep_${USER}" # Change this as desired
 # Input run numbers, this just points to a file which is a list of run numbers, one number per line
 inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/PionLT_2021_2022/${RunList}"
+#inputFile="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH/InputRunLists/heep_runlist/${RunList}"
 
 while true; do
     read -p "Do you wish to begin a new batch submission? (Please answer yes or no) " yn
@@ -87,9 +90,9 @@ while true; do
 		if [[ $TapeFileSize -le 45 ]]; then
 		    echo "MEMORY: 3000 MB" >> ${batch}
 		elif [[ $TapeFileSize -ge 45 ]]; then
-		    echo "MEMORY: 6000 MB" >> ${batch}
+		    echo "MEMORY: 5000 MB" >> ${batch}
 		fi
-		#echo "OS: centos7" >> ${batch}
+		#echo "OS: Alma9" >> ${batch}
                 echo "CPU: 1" >> ${batch} ### hcana single core, setting CPU higher will lower priority!
 		echo "INPUT_FILES: ${tape_file}" >> ${batch}
 		#echo "TIME: 1" >> ${batch} 
