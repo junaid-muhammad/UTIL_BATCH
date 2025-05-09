@@ -33,13 +33,13 @@ if [[ -z "$2" ]]; then
     echo "Please provide a run list as input"
     exit 2
 fi
-if [[ $3 -eq "" ]]; then
+if [[ -z "$3" ]]; then
     echo "Only Run Number entered...I'll assume -1 events!" 
     MAXEVENTS=-1 
 fi
 
 UTILPATH="/group/c-pionlt/USERS/${USER}/hallc_replay_lt/UTIL_BATCH"
-ANASCRIPT="'${UTILPATH}/Analysis_Scripts/FullReplay_PionLT_Batch.sh' ${RUNTYPE}"
+ANASCRIPT="${UTILPATH}/Analysis_Scripts/FullReplay_PionLT_Batch.sh ${RUNTYPE}"
 
 # 15/02/22 - SJDK - Added the swif2 workflow as a variable you can specify here
 Workflow="LTSep_${USER}" # Change this as desired
@@ -90,7 +90,7 @@ while true; do
 		if [[ $TapeFileSize -le 45 ]]; then
 		    echo "MEMORY: 3000 MB" >> ${batch}
 		elif [[ $TapeFileSize -ge 45 ]]; then
-		    echo "MEMORY: 5000 MB" >> ${batch}
+		    echo "MEMORY: 4000 MB" >> ${batch}
 		fi
 		#echo "OS: Alma9" >> ${batch}
                 echo "CPU: 1" >> ${batch} ### hcana single core, setting CPU higher will lower priority!
