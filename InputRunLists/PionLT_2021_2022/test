@@ -1,15 +1,13 @@
-16373
-16374
-16375
-16376
-16377
-16378
-16379
-16380
-16381
-16387
-16388
-16389
-16390
-16392
-16393
+# Renaming files according to the fortran script.
+for file in "${INPUT_INPUT_DIR}"/*; do
+    filename="${file##*/}"              # Just the filename
+    newname="${filename#${PHY_SETTING_LTSEP}}"     # Remove the prefix and underscore
+
+    if [[ "$newname" == ave* ]]; then
+        cp "$file" "${avg_inputFile}/${newname}"
+        echo "Copied $file to ${avg_inputFile}/${newname}"
+    else
+        cp "$file" "${setting_inputFile}/${newname}"
+        echo "Copied $file to ${setting_inputFile}/${newname}"
+    fi
+done
